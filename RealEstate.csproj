@@ -7,29 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DTO\**" />
     <Compile Remove="Error\**" />
-    <Compile Remove="Middlewares\**" />
     <Compile Remove="Repository\**" />
-    <Compile Remove="Services\**" />
     <Compile Remove="Utils\**" />
-    <Content Remove="DTO\**" />
     <Content Remove="Error\**" />
-    <Content Remove="Middlewares\**" />
     <Content Remove="Repository\**" />
-    <Content Remove="Services\**" />
     <Content Remove="Utils\**" />
-    <EmbeddedResource Remove="DTO\**" />
     <EmbeddedResource Remove="Error\**" />
-    <EmbeddedResource Remove="Middlewares\**" />
     <EmbeddedResource Remove="Repository\**" />
-    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="Utils\**" />
-    <None Remove="DTO\**" />
     <None Remove="Error\**" />
-    <None Remove="Middlewares\**" />
     <None Remove="Repository\**" />
-    <None Remove="Services\**" />
     <None Remove="Utils\**" />
   </ItemGroup>
 
@@ -38,8 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="DTO\Response\" />
+    <Folder Include="DTO\Request\" />
     <Folder Include="Models\Enums\" />
+    <Folder Include="Errors\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>
