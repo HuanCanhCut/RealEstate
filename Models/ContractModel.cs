@@ -1,4 +1,3 @@
-using RealEstate.Models.Enums;
 
 namespace RealEstate.Models
 {
@@ -12,7 +11,7 @@ namespace RealEstate.Models
         public int post_id { get; set; }
         public required string amount { get; set; }
         public required string commission { get; set; }
-        public ContractStatusEnum status { get; set; } = ContractStatusEnum.pending; // 'pending', 'approved', 'rejected'
+        public string status { get; set; } = "pending"; // 'pending', 'approved', 'rejected'
         public string duration { get; set; } = "2 năm"; // '2 năm', '5 năm', '10 năm'
         public required string clause { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;

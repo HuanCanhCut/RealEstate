@@ -1,4 +1,3 @@
-using RealEstate.Models.Enums;
 
 namespace RealEstate.Models
 {
@@ -9,9 +8,9 @@ namespace RealEstate.Models
         public required string description { get; set; }
         public required string address { get; set; }
         public required string administrative_address { get; set; }
-        public ProjectTypeEnum? project_type { get; set; } = ProjectTypeEnum.sell;
+        public string? project_type { get; set; } = "sell";
         public string? images { get; set; }
-        public PostStatusEnum? post_status { get; set; } = PostStatusEnum.pending;
+        public string? post_status { get; set; } = "pending";
         public string? status { get; set; } = "Chưa bàn giao"; // 'Chưa bàn giao', 'Đã bàn giao'
         public int category_id { get; set; }
         public int user_id { get; set; }

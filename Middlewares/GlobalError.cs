@@ -1,8 +1,7 @@
-using static RealEstate.Errors.Error;
+﻿using static RealEstate.Errors.Error;
 
 namespace RealEstate.Middlewares
 {
-
     public class GlobalError(RequestDelegate next)
     {
         private readonly RequestDelegate _next = next;

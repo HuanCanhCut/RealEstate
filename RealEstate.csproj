@@ -8,20 +8,15 @@
 
   <ItemGroup>
     <Compile Remove="Error\**" />
-    <Compile Remove="Repository\**" />
-    <Compile Remove="Utils\**" />
     <Content Remove="Error\**" />
-    <Content Remove="Repository\**" />
-    <Content Remove="Utils\**" />
     <EmbeddedResource Remove="Error\**" />
-    <EmbeddedResource Remove="Repository\**" />
-    <EmbeddedResource Remove="Utils\**" />
     <None Remove="Error\**" />
-    <None Remove="Repository\**" />
-    <None Remove="Utils\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="MySql.Data" Version="8.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
@@ -30,7 +25,6 @@
     <Folder Include="DTO\Request\" />
     <Folder Include="Models\Enums\" />
     <Folder Include="Errors\" />
-    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>
