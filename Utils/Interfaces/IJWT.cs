@@ -8,6 +8,6 @@ namespace RealEstate.Utils.Interfaces
     public interface IJWT
     {
         string GenerateToken(int userId);
-        JwtPayload ValidateToken(string token);
+        JwtDecoded ValidateToken(string token);
     }
 }

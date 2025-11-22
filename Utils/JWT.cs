@@ -6,7 +6,7 @@ using RealEstate.Utils.Interfaces;
 
 namespace RealEstate.Utils
 {
-    public class JwtPayload
+    public class JwtDecoded
     {
         public long exp { get; set; }
         public long iat { get; set; }
@@ -39,7 +39,7 @@ namespace RealEstate.Utils
             }
         }
 
-        public JwtPayload ValidateToken(string token)
+        public JwtDecoded ValidateToken(string token)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace RealEstate.Utils
                           .WithAlgorithm(new HMACSHA256Algorithm())
                           .WithSecret(secretKey)
                           .MustVerifySignature()
-                          .Decode<JwtPayload>(token);
+                          .Decode<JwtDecoded>(token);
 
                 return json;
             }
