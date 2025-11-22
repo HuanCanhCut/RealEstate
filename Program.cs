@@ -3,8 +3,9 @@ using RealEstate.Repositories;
 using RealEstate.Repositories.Interfaces;
 using RealEstate.Services;
 using RealEstate.Services.Interfaces;
+using RealEstate.Utils.Interfaces;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);                       
 
 // Add services to the container.
 
@@ -20,6 +21,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // SERVICES
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// UTILS
+builder.Services.AddScoped<IJWT, RealEstate.Utils.JWT>();
 
 var app = builder.Build();
 

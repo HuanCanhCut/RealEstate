@@ -1,9 +1,10 @@
-﻿using RealEstate.Models;
+﻿using RealEstate.DTO.Response;
+using RealEstate.Models;
 
 namespace RealEstate.Services.Interfaces
 {
     public interface IAuthService
     {
-        UserModel Register(string email, string password);
+        ApiResponse<UserModel, MetaToken> Register(string email, string password);
     }
 }

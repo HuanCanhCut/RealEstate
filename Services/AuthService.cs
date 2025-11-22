@@ -1,15 +1,18 @@
-﻿using RealEstate.Models;
+﻿using RealEstate.DTO.Response;
+using RealEstate.Models;
 using RealEstate.Repositories.Interfaces;
 using RealEstate.Services.Interfaces;
+using RealEstate.Utils.Interfaces;
 using static RealEstate.Errors.Error;
 
 namespace RealEstate.Services
 {
-    public class AuthService(IUserRepository userRepository) : IAuthService
+    public class AuthService(IUserRepository userRepository, IJWT jwt) : IAuthService
     {
         private readonly IUserRepository _userRepository = userRepository;
+        private readonly IJWT _jwt = jwt;
 
-        public UserModel Register(string email, string password)
+        public ApiResponse<UserModel, MetaToken> Register(string email, string password)
         {
             try
             {
@@ -36,7 +39,9 @@ namespace RealEstate.Services
 
                 int insertedUserId = _userRepository.CreateUser(newUser);
 
-                return newUser;
+                string token = _jwt.GenerateToken(insertedUserId);
+
+                return new ApiResponse<UserModel, MetaToken>(newUser, new MetaToken { access_token = token });
             }
             catch (Exception ex)
             {
@@ -45,7 +50,7 @@ namespace RealEstate.Services
                     throw;
                 }
 
-                throw new InternalServerError(ex.Message);
+                throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
     }
