@@ -1,5 +1,5 @@
-﻿using MySql.Data.MySqlClient;
-using System.Data;
+﻿using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace RealEstate.Repositories
 {
@@ -7,9 +7,9 @@ namespace RealEstate.Repositories
     {
         private string connectionString { get; set; }
 
-        public DbContext(IConfiguration configuration)
+        public DbContext()
         {
-            connectionString = configuration["ConnectionStrings:DefaultConnection"]!;
+            connectionString = $"Server=localhost;Port={Environment.GetEnvironmentVariable("DB_PORT")!};Database={Environment.GetEnvironmentVariable("DB_NAME")!};User Id={Environment.GetEnvironmentVariable("DB_USER")!};Password={Environment.GetEnvironmentVariable("DB_PASSWORD")!};";
         }
 
         public DataTable ExecuteQuery(string query)

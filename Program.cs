@@ -3,9 +3,12 @@ using RealEstate.Repositories;
 using RealEstate.Repositories.Interfaces;
 using RealEstate.Services;
 using RealEstate.Services.Interfaces;
+using RealEstate.Utils;
 using RealEstate.Utils.Interfaces;
 
-var builder = WebApplication.CreateBuilder(args);                       
+EnvLoader.Load();
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -14,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<DbContext>(provider => new DbContext(builder.Configuration));
+builder.Services.AddScoped<DbContext>(provider => new DbContext());
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
