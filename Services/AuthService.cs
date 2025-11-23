@@ -25,14 +25,14 @@ namespace RealEstate.Services
 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
 
-                string fullName = email.Split('@')[0].ToString();
+                string emailName = email.Split('@')[0].ToString();
 
                 UserModel newUser = new()
                 {
-                    full_name = fullName,
+                    full_name = emailName,
                     email = email,
                     password = hashedPassword,
-                    nickname = fullName,
+                    nickname = Guid.NewGuid().ToString(),
                     created_at = DateTime.UtcNow,
                     updated_at = DateTime.UtcNow
                 };

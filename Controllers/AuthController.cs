@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTO.Request;
 using RealEstate.DTO.Response;
 using RealEstate.Models;
 using RealEstate.Services.Interfaces;
