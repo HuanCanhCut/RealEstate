@@ -1,4 +1,5 @@
 ﻿using RealEstate.DTO.Response;
+using RealEstate.DTO.ServiceResponse;
 using RealEstate.Models;
 using RealEstate.Repositories.Interfaces;
 using RealEstate.Services.Interfaces;
@@ -12,7 +13,7 @@ namespace RealEstate.Services
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IJWT _jwt = jwt;
 
-        public ApiResponse<UserModel, MetaToken> Register(string email, string password)
+        public RegisterServiceResponse Register(string email, string password)
         {
             try
             {
@@ -20,7 +21,7 @@ namespace RealEstate.Services
 
                 if (userExist != null)
                 {
-                    throw new ConflictError("Email already exists");
+                    throw new BadRequestError("Không thể đăng kí tài khoản, vui lòng thử lại");
                 }
 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
@@ -41,7 +42,48 @@ namespace RealEstate.Services
 
                 string token = _jwt.GenerateToken(insertedUserId);
 
-                return new ApiResponse<UserModel, MetaToken>(newUser, new MetaToken { access_token = token });
+                // return new ApiResponse<UserModel, MetaToken>(newUser, new MetaToken { access_token = token });
+
+                return new RegisterServiceResponse()
+                {
+                    user = newUser,
+                    meta = new MetaToken { access_token = token }
+                };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public LoginServiceResponse Login(string email, string password)
+        {
+            try
+            {
+                UserModel? userExist = _userRepository.GetUserByEmail(email);
+
+                if (userExist == null)
+                {
+                    throw new UnauthorizedError("Tài khoản hoặc mật khẩu không đúng. Vui lòng thử lại");
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(password, userExist.password))
+                {
+                    throw new UnauthorizedError("Tài khoản hoặc mật khẩu không đúng. Vui lòng thử lại");
+                }
+
+                string token = _jwt.GenerateToken(userExist.id);
+
+                return new LoginServiceResponse()
+                {
+                    user = userExist,
+                    meta = new MetaToken { access_token = token }
+                };
             }
             catch (Exception ex)
             {

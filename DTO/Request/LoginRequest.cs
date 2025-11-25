@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace RealEstate.DTO.Request
 {
-    public class RegisterRequest
+    public class LoginRequest
     {
         [Required(ErrorMessage = "Email là bắt buộc")]
         [EmailAddress(ErrorMessage = "Email không hợp lệ")]
         public required string Email { get; set; }
         [Required(ErrorMessage = "Mật khẩu là bắt buộc")]
-        [MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự")]
         public required string Password { get; set; }
     }
 }
