@@ -40,5 +40,19 @@ namespace RealEstate.Repositories
                 throw;
             }
         }
+
+        public int UpdateUserPassword(int id, string password)
+        {
+            try
+            {
+                string query = $"UPDATE users SET password = '{password}' WHERE id = {id}";
+
+                return _dbContext.ExecuteNonQuery(query);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

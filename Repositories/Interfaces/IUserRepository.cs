@@ -6,5 +6,6 @@ namespace RealEstate.Repositories.Interfaces
     {
         UserModel? GetUserByEmail(string email);
         int CreateUser(UserModel user);
+        int UpdateUserPassword(int id, string password);
     }
 }

@@ -20,7 +20,7 @@ namespace RealEstate.Controllers
         {
             try
             {
-                RegisterServiceResponse result = _authService.Register(register.Email, register.Password);
+                RegisterServiceResponse result = _authService.Register(register.email, register.password);
 
                 return CreatedAtAction("Register", new ApiResponse<UserModel, MetaToken>(result.user, result.meta));
             }
@@ -35,9 +35,24 @@ namespace RealEstate.Controllers
         {
             try
             {
-                LoginServiceResponse response = _authService.Login(login.Email, login.Password);
+                LoginServiceResponse response = _authService.Login(login.email, login.password);
 
                 return Ok(new ApiResponse<UserModel, MetaToken>(response.user, response.meta));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPatch("password")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest changePassword)
+        {
+            try
+            {
+                _authService.ChangePassword(changePassword.email, changePassword.password, changePassword.new_password);
+
+                return NoContent();
             }
             catch (Exception)
             {

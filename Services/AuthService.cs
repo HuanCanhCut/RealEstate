@@ -42,8 +42,6 @@ namespace RealEstate.Services
 
                 string token = _jwt.GenerateToken(insertedUserId);
 
-                // return new ApiResponse<UserModel, MetaToken>(newUser, new MetaToken { access_token = token });
-
                 return new RegisterServiceResponse()
                 {
                     user = newUser,
@@ -84,6 +82,29 @@ namespace RealEstate.Services
                     user = userExist,
                     meta = new MetaToken { access_token = token }
                 };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public void ChangePassword(string email, string password, string new_password)
+        {
+            try
+            {
+                LoginServiceResponse userValid = this.Login(email, password);
+
+                UserModel user = userValid.user;
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(new_password);
+
+                _userRepository.UpdateUserPassword(user.id, hashedPassword);
             }
             catch (Exception ex)
             {

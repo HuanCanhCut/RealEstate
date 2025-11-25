@@ -10,8 +10,8 @@ namespace RealEstate.DTO.Request
     {
         [Required(ErrorMessage = "Email là bắt buộc")]
         [EmailAddress(ErrorMessage = "Email không hợp lệ")]
-        public required string Email { get; set; }
+        public required string email { get; set; }
         [Required(ErrorMessage = "Mật khẩu là bắt buộc")]
-        public required string Password { get; set; }
+        public required string password { get; set; }
     }
 }
