@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using RealEstate.Models.Enums;
 
 namespace RealEstate.Models
 {
@@ -13,7 +14,7 @@ namespace RealEstate.Models
         public required string nickname { get; set; }
         public string? phone_number { get; set; }
         public string? avatar { get; set; }
-        public string? role { get; set; } = "user";
+        public UserRole? role { get; set; } = UserRole.user;
         public string? address { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public DateTime updated_at { get; set; } = DateTime.UtcNow;

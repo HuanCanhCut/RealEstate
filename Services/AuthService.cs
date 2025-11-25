@@ -1,6 +1,7 @@
 ﻿using RealEstate.DTO.Response;
 using RealEstate.DTO.ServiceResponse;
 using RealEstate.Models;
+using RealEstate.Models.Enums;
 using RealEstate.Repositories.Interfaces;
 using RealEstate.Services.Interfaces;
 using RealEstate.Utils.Interfaces;
@@ -35,7 +36,8 @@ namespace RealEstate.Services
                     password = hashedPassword,
                     nickname = Guid.NewGuid().ToString(),
                     created_at = DateTime.UtcNow,
-                    updated_at = DateTime.UtcNow
+                    updated_at = DateTime.UtcNow,
+                    role = UserRole.user
                 };
 
                 int insertedUserId = _userRepository.CreateUser(newUser);

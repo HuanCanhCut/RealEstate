@@ -164,11 +164,24 @@ namespace RealEstate.Repositories
                             {
                                 prop.SetValue(obj, Convert.ToSingle(value), null);
                             }
+                            else if (type.IsEnum)
+                            {
+                                prop.SetValue(obj, Enum.Parse(type, value.ToString()), null);
+                            }
                             else if (type.Name == "Nullable`1" || type.Name == "DateTime")
                             {
                                 var t = Nullable.GetUnderlyingType(type) ?? type;
-                                var safeValue = (value == null) ? null : Convert.ChangeType(value, t);
-                                prop.SetValue(obj, safeValue, null);
+
+                                if (t.IsEnum)
+                                {
+                                    var safeValue = (value == null) ? null : Enum.Parse(t, value.ToString());
+                                    prop.SetValue(obj, safeValue, null);
+                                }
+                                else
+                                {
+                                    var safeValue = (value == null) ? null : Convert.ChangeType(value, t);
+                                    prop.SetValue(obj, safeValue, null);
+                                }
                             }
                             else
                             {

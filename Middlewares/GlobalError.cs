@@ -20,8 +20,6 @@ namespace RealEstate.Middlewares
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
-
             if (exception is AppError appError)
             {
                 string message = appError.Message;

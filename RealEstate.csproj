@@ -26,8 +26,8 @@
     <Folder Include="DTO\ServiceResponse\" />
     <Folder Include="DTO\Response\" />
     <Folder Include="DTO\Request\" />
-    <Folder Include="Models\Enums\" />
     <Folder Include="Errors\" />
+    <Folder Include="Models\Enums\" />
     <Folder Include="Utils\Interfaces\" />
   </ItemGroup>
 

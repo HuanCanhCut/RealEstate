@@ -1,3 +1,4 @@
+using RealEstate.Models.Enums;
 
 namespace RealEstate.Models
 {
@@ -10,11 +11,11 @@ namespace RealEstate.Models
         public required string administrative_address { get; set; }
         public string? project_type { get; set; } = "sell";
         public string? images { get; set; }
-        public string? post_status { get; set; } = "pending";
+        public PostEnum? post_status { get; set; } = PostEnum.pending;
         public string? status { get; set; } = "Chưa bàn giao"; // 'Chưa bàn giao', 'Đã bàn giao'
         public int category_id { get; set; }
         public int user_id { get; set; }
-        public string? role { get; set; } = "user"; // 'user' or 'agent'
+        public PostUserRole? role { get; set; } = PostUserRole.user;
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
 
