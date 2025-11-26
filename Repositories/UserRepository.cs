@@ -54,5 +54,18 @@ namespace RealEstate.Repositories
                 throw;
             }
         }
+
+        public UserModel GetUserById(int id)
+        {
+            try
+            {
+                string query = $"SELECT * FROM users WHERE id = {id}";
+                return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>()?.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

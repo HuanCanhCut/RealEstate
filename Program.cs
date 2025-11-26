@@ -25,6 +25,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // SERVICES
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // UTILS
 builder.Services.AddScoped<IJWT, RealEstate.Utils.JWT>();
