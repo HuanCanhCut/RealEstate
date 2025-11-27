@@ -67,5 +67,19 @@ namespace RealEstate.Repositories
                 throw;
             }
         }
+
+
+        public UserModel GetUserByNickname(string nickname)
+        {
+            try
+            {
+                string query = @$"SELECT * FROM users WHERE MATCH (nickname) AGAINST ('{nickname}')";
+                return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>()?.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

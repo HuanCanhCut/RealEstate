@@ -5,7 +5,7 @@ using static RealEstate.Errors.Error;
 
 namespace RealEstate.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
 
         private readonly IUserRepository _userRepository;
@@ -13,7 +13,7 @@ namespace RealEstate.Services
         {
             _userRepository = userRepository;
 
-            
+
         }
 
         public UserModel GetUserById(int id)
@@ -22,7 +22,7 @@ namespace RealEstate.Services
             {
                 UserModel? user = _userRepository.GetUserById(id);
 
-                if( user == null)
+                if (user == null)
                 {
                     throw new UnauthorizedError("Unauthorize");
                 }
@@ -30,7 +30,30 @@ namespace RealEstate.Services
             }
             catch (Exception ex)
             {
-                if(ex is AppError)
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public UserModel? GetUserByNickname(string nickname)
+        {
+            try
+            {
+                UserModel? user = _userRepository.GetUserByNickname(nickname);
+
+                if (user == null)
+                {
+                    throw new UnauthorizedError("Không tìm thấy người dùng này!");
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
                 {
                     throw;
                 }

@@ -33,5 +33,19 @@ namespace RealEstate.Controllers
                 throw;
             }
         }
+
+        [HttpGet("{nickname}")]
+        public ActionResult<ApiResponse<UserModel, object?>> getUserByNickname([FromRoute] string nickname)
+        {
+            try
+            {
+                UserModel? user = _userService.GetUserByNickname(nickname);
+                return Ok(new ApiResponse<UserModel, object?>(user));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

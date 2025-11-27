@@ -9,5 +9,6 @@ namespace RealEstate.Repositories.Interfaces
         int UpdateUserPassword(int id, string password);
 
         UserModel? GetUserById(int id);
+        UserModel? GetUserByNickname(string nickname);
     }
 }
