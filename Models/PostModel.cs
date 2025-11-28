@@ -9,7 +9,7 @@ namespace RealEstate.Models
         public required string description { get; set; }
         public required string address { get; set; }
         public required string administrative_address { get; set; }
-        public string? project_type { get; set; } = "sell";
+        public ProjectType? project_type { get; set; } = ProjectType.sell;
         public string? images { get; set; }
         public PostEnum? post_status { get; set; } = PostEnum.pending;
         public string? status { get; set; } = "Chưa bàn giao"; // 'Chưa bàn giao', 'Đã bàn giao'
