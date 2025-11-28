@@ -20,8 +20,8 @@ namespace RealEstate.Models
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
 
         // Navigation properties for joins
-        public CategoryModel? Category { get; set; }
-        public UserModel? User { get; set; }
-        public PostDetailModel? PostDetail { get; set; }
+        public CategoryModel? category { get; set; }
+        public UserModel? user { get; set; }
+        public PostDetailModel? post_details { get; set; }
     }
 }
