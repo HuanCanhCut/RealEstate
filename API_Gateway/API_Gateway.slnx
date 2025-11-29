@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="../AdminAPI/AdminAPI.csproj" />
+  <Project Path="../UserAPI/UserAPI.csproj" />
+  <Project Path="API_Gateway.csproj" />
+</Solution>
