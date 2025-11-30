@@ -33,7 +33,7 @@ namespace UserAPI.Repositories
                 SELECT LAST_INSERT_ID();
             ";
 
-                return _dbContext.ExecuteNonQuery(query);
+                return Convert.ToInt32(_dbContext.ExecuteScalar(query));
             }
             catch (Exception)
             {

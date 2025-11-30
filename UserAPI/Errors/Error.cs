@@ -18,8 +18,8 @@
         // 400: Bad Request
         public class BadRequestError : AppError
         {
-            public BadRequestError(string message = "Bad Request")
-                : base(message, StatusCodes.Status400BadRequest)
+            public BadRequestError(string message = "Bad Request", object? error = null)
+                : base(message, StatusCodes.Status400BadRequest, error)
             {
             }
         }
@@ -27,8 +27,8 @@
         // 401: Unauthorized
         public class UnauthorizedError : AppError
         {
-            public UnauthorizedError(string message = "Unauthorized")
-                : base(message, StatusCodes.Status401Unauthorized)
+            public UnauthorizedError(string message = "Unauthorized", object? error = null)
+                : base(message, StatusCodes.Status401Unauthorized, error)
             {
             }
         }
@@ -36,8 +36,8 @@
         // 403: Forbidden
         public class ForbiddenError : AppError
         {
-            public ForbiddenError(string message = "Forbidden")
-                : base(message, StatusCodes.Status403Forbidden)
+            public ForbiddenError(string message = "Forbidden", object? error = null)
+                : base(message, StatusCodes.Status403Forbidden, error)
             {
             }
         }
@@ -45,8 +45,8 @@
         // 404: Not Found
         public class NotFoundError : AppError
         {
-            public NotFoundError(string message = "Not Found")
-                : base(message, StatusCodes.Status404NotFound)
+            public NotFoundError(string message = "Not Found", object? error = null)
+                : base(message, StatusCodes.Status404NotFound, error)
             {
             }
         }
@@ -54,8 +54,8 @@
         // 409: Conflict
         public class ConflictError : AppError
         {
-            public ConflictError(string message = "Conflict")
-                : base(message, StatusCodes.Status409Conflict)
+            public ConflictError(string message = "Conflict", object? error = null)
+                : base(message, StatusCodes.Status409Conflict, error)
             {
             }
         }
@@ -72,8 +72,8 @@
         // 429: Too Many Requests
         public class TooManyRequestsError : AppError
         {
-            public TooManyRequestsError(string message = "Too Many Requests")
-                : base(message, StatusCodes.Status429TooManyRequests)
+            public TooManyRequestsError(string message = "Too Many Requests", object? error = null)
+                : base(message, StatusCodes.Status429TooManyRequests, error)
             {
             }
         }
@@ -81,8 +81,8 @@
         // 500: Internal Server Error
         public class InternalServerError : AppError
         {
-            public InternalServerError(string message = "Internal Server Error")
-                : base(message, StatusCodes.Status500InternalServerError)
+            public InternalServerError(string message = "Internal Server Error", object? error = null)
+                : base(message, StatusCodes.Status500InternalServerError, error)
             {
             }
         }
@@ -90,8 +90,8 @@
         // 501: Not Implemented
         public class NotImplementedError : AppError
         {
-            public NotImplementedError(string message = "Not Implemented")
-                : base(message, StatusCodes.Status501NotImplemented)
+            public NotImplementedError(string message = "Not Implemented", object? error = null)
+                : base(message, StatusCodes.Status501NotImplemented, error)
             {
             }
         }
