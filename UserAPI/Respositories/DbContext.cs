@@ -18,7 +18,6 @@ namespace UserAPI.Repositories
 
             try
             {
-                // trong trường hợp mà khối lệnh bên trong có lỗi thì nó vẫn đóng connection
                 using MySqlConnection connection = new(connectionString);
                 {
                     connection.Open();

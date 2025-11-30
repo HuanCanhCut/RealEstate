@@ -154,6 +154,7 @@ namespace UserAPI.Repositories
                         {
                             if (column.ColumnName.Contains("json"))
                             {
+
                                 prop.SetValue(obj, MessageConvert.DeserializeObject(("" + value).Replace("$", ""), type), null);
                             }
                             else if (type.Name == "String")

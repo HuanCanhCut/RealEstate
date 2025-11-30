@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace UserAPI.DTO.Response
 {
     public class MetaPagination
     {
-        public required Pagination pagination { get; set; }
+        public Pagination pagination { get; set; }
+
+        public MetaPagination(int total, int count, int current_page, int per_page)
+        {
+            this.pagination = new Pagination(total, count, current_page, per_page);
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace UserAPI.DTO.Request
         public string? deposit { get; set; }
     }
 
-    public class PostRequest
+    public class CreatePostRequest
     {
         [Required(ErrorMessage = "Title là bắt buộc")]
         public required string title { get; set; }

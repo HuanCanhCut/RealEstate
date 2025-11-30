@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using UserAPI.DTO.Request;
+using UserAPI.DTO.ServiceResponse;
 using UserAPI.Helpers;
 using UserAPI.Models;
 using UserAPI.Repositories;
@@ -15,7 +17,7 @@ namespace UserAPI.Respositories
     {
         private readonly DbContext _dbContext = dbContext;
 
-        public int CreatePost(PostRequest post)
+        public int CreatePost(CreatePostRequest post)
         {
             try
             {
@@ -78,7 +80,6 @@ namespace UserAPI.Respositories
                         );
                 ";
 
-                Console.WriteLine(postDetailInsertSql);
 
                 _dbContext.ExecuteNonQuery(postDetailInsertSql);
 
@@ -96,22 +97,126 @@ namespace UserAPI.Respositories
             {
                 string sql = $@"
                     SELECT
-                        *
+                        *,
+                        (
+                            SELECT 
+                                JSON_ARRAYAGG(
+                                    JSON_OBJECT(
+                                        'bedrooms', bedrooms,
+                                        'bathrooms', bathrooms,
+                                        'balcony', balcony,
+                                        'main_door', main_door,
+                                        'legal_documents', legal_documents,
+                                        'interior_status', interior_status,
+                                        'area', area,
+                                        'price', price,
+                                        'deposit', deposit,
+                                        'post_id', post_id
+                                    )
+                                )
+                            FROM post_details
+                            WHERE post_details.post_id = posts.id
+                        ) AS json_post_detail
                     FROM
                         posts
-                        JOIN post_details ON posts.id = post_details.post_id
                     WHERE
                         posts.id = {id};
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
-                return table.MapWithSingleChild<PostModel, PostDetailModel>(
-                    "id",
-                    row => table.ConvertTo<PostModel>()?.FirstOrDefault(),
-                    row => table.ConvertTo<PostDetailModel>()?.FirstOrDefault(),
-                    (parent, children) => parent.post_details = children
-                ).FirstOrDefault();
+                return table.ConvertTo<PostModel>()?.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [AllowAnonymous]
+        public IList<PostModel>? GetPosts(GetPostRequest request)
+        {
+            try
+            {
+                string sql = @$"
+                    SELECT 
+                        *,
+                        (
+                            SELECT 
+                                JSON_ARRAYAGG(
+                                    JSON_OBJECT(
+                                        'bedrooms', bedrooms,
+                                        'bathrooms', bathrooms,
+                                        'balcony', balcony,
+                                        'main_door', main_door,
+                                        'legal_documents', legal_documents,
+                                        'interior_status', interior_status,
+                                        'area', area,
+                                        'price', price,
+                                        'deposit', deposit,
+                                        'post_id', post_id
+                                    )
+                                )
+                            FROM post_details
+                            WHERE post_details.post_id = posts.id
+                        ) AS json_post_detail
+                    FROM posts
+                    -- WHERE 1 = 1
+                ";
+
+                if (request.project_type != null)
+                {
+                    sql += $"AND project_type = '{request.project_type}'";
+                }
+
+                if (request.min_price != null)
+                {
+                    sql += $"AND price >= {request.min_price}";
+                }
+
+                if (request.max_price != null)
+                {
+                    sql += $"AND price <= {request.max_price}";
+                }
+
+
+                // if (request.property_categories?.Length != 0)
+                // {
+                //     sql += "AND category_id IN (";
+
+                //     for (int i = 0; i < request.property_categories?.Length; i++)
+                //     {
+                //         sql += $"{request.property_categories[i]}";
+                //         if (i < request.property_categories.Length - 1)
+                //         {
+                //             sql += ",";
+                //         }
+                //     }
+                //     sql += ")";
+                // }
+
+                sql += $" LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+
+
+                return table.ConvertTo<PostModel>();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int Count()
+        {
+            try
+            {
+                string sql = "SELECT COUNT(1) FROM posts";
+
+                return Convert.ToInt32(_dbContext.ExecuteScalar(sql));
             }
             catch (Exception)
             {
