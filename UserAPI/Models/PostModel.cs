@@ -20,8 +20,8 @@ namespace UserAPI.Models
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
 
         // Navigation properties for joins
-        public CategoryModel? category { get; set; }
-        public UserModel? user { get; set; }
-        public List<PostDetailModel>? json_post_detail { get; set; }
+        public CategoryModel? json_category { get; set; }
+        public UserModel? json_user { get; set; }
+        public PostDetailModel json_post_detail { get; set; }
     }
 }

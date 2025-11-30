@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using UserAPI.DTO.Request;
 using UserAPI.DTO.ServiceResponse;
-using UserAPI.Helpers;
 using UserAPI.Models;
 using UserAPI.Repositories;
 using UserAPI.Respositories.Interfaces;
@@ -102,6 +101,7 @@ namespace UserAPI.Respositories
                             SELECT 
                                 JSON_ARRAYAGG(
                                     JSON_OBJECT(
+                                        'id', id,
                                         'bedrooms', bedrooms,
                                         'bathrooms', bathrooms,
                                         'balcony', balcony,
@@ -143,7 +143,6 @@ namespace UserAPI.Respositories
                         *,
                         (
                             SELECT 
-                                JSON_ARRAYAGG(
                                     JSON_OBJECT(
                                         'bedrooms', bedrooms,
                                         'bathrooms', bathrooms,
@@ -156,7 +155,6 @@ namespace UserAPI.Respositories
                                         'deposit', deposit,
                                         'post_id', post_id
                                     )
-                                )
                             FROM post_details
                             WHERE post_details.post_id = posts.id
                         ) AS json_post_detail
