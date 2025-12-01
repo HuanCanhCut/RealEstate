@@ -157,47 +157,46 @@ namespace UserAPI.Respositories
                                     )
                             FROM post_details
                             WHERE post_details.post_id = posts.id
-                        ) AS json_post_detail
+                        ) AS json_post_detail,
+                        (
+                            SELECT JSON_OBJECT(
+                                'id', id,
+                                'name', name,
+                                'created_at', created_at,
+                                'updated_at', updated_at
+                            )
+                            FROM categories
+                            WHERE categories.id = posts.category_id
+                        ) AS json_category
                     FROM posts
-                    -- WHERE 1 = 1
+                    JOIN categories ON categories.id = posts.category_id 
+                    JOIN post_details ON post_details.post_id = posts.id
+                    WHERE 1=1 
                 ";
+
+                if (!String.IsNullOrEmpty(request.property_categories?.Length.ToString()))
+                {
+                    sql += $" AND categories.name IN ({string.Join(", ", request.property_categories.Select(x => $"'{x}'"))})";
+                }
 
                 if (request.project_type != null)
                 {
-                    sql += $"AND project_type = '{request.project_type}'";
+                    sql += $" AND project_type = '{request.project_type}'";
                 }
 
                 if (request.min_price != null)
                 {
-                    sql += $"AND price >= {request.min_price}";
+                    sql += $" AND post_details.price >= {request.min_price}";
                 }
 
                 if (request.max_price != null)
                 {
-                    sql += $"AND price <= {request.max_price}";
+                    sql += $" AND post_details.price <= {request.max_price}";
                 }
-
-
-                // if (request.property_categories?.Length != 0)
-                // {
-                //     sql += "AND category_id IN (";
-
-                //     for (int i = 0; i < request.property_categories?.Length; i++)
-                //     {
-                //         sql += $"{request.property_categories[i]}";
-                //         if (i < request.property_categories.Length - 1)
-                //         {
-                //             sql += ",";
-                //         }
-                //     }
-                //     sql += ")";
-                // }
 
                 sql += $" LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
-
-
 
                 return table.ConvertTo<PostModel>();
 

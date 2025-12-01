@@ -22,6 +22,6 @@ namespace UserAPI.Models
         // Navigation properties for joins
         public CategoryModel? json_category { get; set; }
         public UserModel? json_user { get; set; }
-        public PostDetailModel json_post_detail { get; set; }
+        public PostDetailModel? json_post_detail { get; set; }
     }
 }
