@@ -18,7 +18,6 @@ namespace UserAPI.Repositories
 
             try
             {
-                // trong trường hợp mà khối lệnh bên trong có lỗi thì nó vẫn đóng connection
                 using MySqlConnection connection = new(connectionString);
                 {
                     connection.Open();
@@ -76,7 +75,7 @@ namespace UserAPI.Repositories
         }
 
 
-        public string? ExecuteScalar(string query)
+        public object ExecuteScalar(string query)
         {
             object? result = null;
 
@@ -91,6 +90,8 @@ namespace UserAPI.Repositories
                     result = command.ExecuteScalar();
 
                     connection.Close();
+
+                    return result;
                 }
             }
             catch (MySqlException)
@@ -98,7 +99,6 @@ namespace UserAPI.Repositories
                 throw;
             }
 
-            return result?.ToString();
         }
     }
 }

@@ -15,8 +15,5 @@ namespace UserAPI.Models
         public string? deposit { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
-
-        // Navigation property for joins
-        public PostModel? posts { get; set; }
     }
 }

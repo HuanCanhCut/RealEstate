@@ -55,8 +55,8 @@ CREATE TABLE post_details (
     legal_documents VARCHAR(50),
     interior_status VARCHAR(50),
     area int,
-    price VARCHAR(20),
-    deposit VARCHAR(20),
+    price DECIMAL(14, 2),
+    deposit DECIMAL(14, 2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -79,8 +79,8 @@ CREATE TABLE contracts (
     customer_cccd VARCHAR(12) NOT NULL,
     customer_phone VARCHAR(12) NOT NULL,
     post_id INT NOT NULL,
-    amount VARCHAR(30) NOT NULL,
-    commission VARCHAR(20) NOT NULL,
+    amount DECIMAL(14, 2) NOT NULL,
+    commission DECIMAL(14, 2) NOT NULL,
     status ENUM(
         'pending',
         'approved',
@@ -98,3 +98,11 @@ CREATE TABLE contracts (
 CREATE FULLTEXT INDEX full_name_idx ON users (full_name);
 
 CREATE FULLTEXT INDEX nickname_idx ON users (nickname)
+
+ALTER TABLE post_details MODIFY price DECIMAL(14, 2);
+
+ALTER TABLE post_details MODIFY deposit DECIMAL(14, 2);
+
+ALTER Table contracts MODIFY amount DECIMAL(14, 2);
+
+ALTER Table contracts MODIFY commission DECIMAL(14, 2);

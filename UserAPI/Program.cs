@@ -3,6 +3,8 @@ using System.Xml;
 using UserAPI.Middlewares;
 using UserAPI.Repositories;
 using UserAPI.Repositories.Interfaces;
+using UserAPI.Respositories;
+using UserAPI.Respositories.Interfaces;
 using UserAPI.Services;
 using UserAPI.Services.Interfaces;
 using UserAPI.Utils;
@@ -23,10 +25,12 @@ builder.Services.AddScoped<DbContext>(provider => new DbContext());
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 // SERVICES
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 // UTILS
 builder.Services.AddScoped<IJWT, UserAPI.Utils.JWT>();
