@@ -103,9 +103,9 @@ namespace UserAPI.Repositories
 
             return table;
         }
-        public static IList<T> ConvertTo<T>(IList<DataRow> rows)
+        public static List<T> ConvertTo<T>(IList<DataRow> rows)
         {
-            IList<T> list = null;
+            List<T> list = null;
 
             if (rows != null)
             {
@@ -120,7 +120,7 @@ namespace UserAPI.Repositories
 
             return list;
         }
-        public static IList<T>? ConvertTo<T>(this DataTable table)
+        public static List<T>? ConvertTo<T>(this DataTable table)
         {
             if (table == null)
             {

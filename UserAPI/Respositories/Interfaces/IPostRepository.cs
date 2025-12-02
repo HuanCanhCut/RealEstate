@@ -12,7 +12,8 @@ namespace UserAPI.Respositories.Interfaces
     {
         int CreatePost(CreatePostRequest post);
         PostModel GetPostById(int id);
-        IList<PostModel> GetPosts(GetPostRequest request);
-        int Count();
+        List<PostModel> GetPosts(GetPostRequest request);
+        int CountAll();
+        List<PostModel> SearchPosts(string q);
     }
 }

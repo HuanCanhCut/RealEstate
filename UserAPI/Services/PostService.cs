@@ -65,7 +65,7 @@ namespace UserAPI.Services
             try
             {
                 IList<PostModel>? result = _postRepository.GetPosts(request);
-                int total = _postRepository.Count();
+                int total = _postRepository.CountAll();
 
                 return new GetPostServiceResponse
                 {
@@ -73,6 +73,28 @@ namespace UserAPI.Services
                     total = total,
                     count = result.Count
                 };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message, new
+                {
+                    stack_trace = ex.StackTrace
+                });
+            }
+        }
+
+        public List<PostModel> SearchPosts(string q)
+        {
+            try
+            {
+                List<PostModel>? posts = _postRepository.SearchPosts(q);
+
+                return posts;
             }
             catch (Exception ex)
             {

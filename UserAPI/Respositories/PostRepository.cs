@@ -134,7 +134,7 @@ namespace UserAPI.Respositories
         }
 
         [AllowAnonymous]
-        public IList<PostModel>? GetPosts(GetPostRequest request)
+        public List<PostModel>? GetPosts(GetPostRequest request)
         {
             try
             {
@@ -144,15 +144,8 @@ namespace UserAPI.Respositories
                         (
                             SELECT 
                                     JSON_OBJECT(
-                                        'bedrooms', bedrooms,
-                                        'bathrooms', bathrooms,
-                                        'balcony', balcony,
-                                        'main_door', main_door,
-                                        'legal_documents', legal_documents,
-                                        'interior_status', interior_status,
                                         'area', area,
                                         'price', price,
-                                        'deposit', deposit,
                                         'post_id', post_id
                                     )
                             FROM post_details
@@ -207,13 +200,47 @@ namespace UserAPI.Respositories
             }
         }
 
-        public int Count()
+        public int CountAll()
         {
             try
             {
                 string sql = "SELECT COUNT(1) FROM posts";
 
                 return Convert.ToInt32(_dbContext.ExecuteScalar(sql));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<PostModel> SearchPosts(string q)
+        {
+            try
+            {
+                string sql = $@"
+                    SELECT 
+                        *,
+                        (
+                            SELECT 
+                                JSON_OBJECT(
+                                    'area', area,
+                                    'price', price,
+                                    'post_id', post_id
+                                )
+                            FROM post_details
+                            WHERE post_details.post_id = posts.id
+                        ) AS json_post_detail
+                    FROM
+                        posts
+                    WHERE
+                        MATCH(title, address, administrative_address) AGAINST ('{q}*' IN BOOLEAN MODE)
+                    LIMIT 5;
+                ";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+                return table.ConvertTo<PostModel>();
             }
             catch (Exception)
             {
