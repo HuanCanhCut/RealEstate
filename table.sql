@@ -106,3 +106,9 @@ ALTER TABLE post_details MODIFY deposit DECIMAL(14, 2);
 ALTER Table contracts MODIFY amount DECIMAL(14, 2);
 
 ALTER Table contracts MODIFY commission DECIMAL(14, 2);
+
+CREATE FULLTEXT INDEX post_title_address_idx ON posts (
+    title,
+    address,
+    administrative_address
+);
