@@ -16,16 +16,14 @@ namespace UserAPI.Utils
 
     public class JWT : IJWT
     {
-        public string GenerateToken(int userId)
+        public string GenerateToken(int userId, string secretKey, int expMinutes)
         {
             try
             {
-                string secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set");
-
                 string token = JwtBuilder.Create()
                           .WithAlgorithm(new HMACSHA256Algorithm())
                           .WithSecret(secretKey)
-                          .AddClaim("exp", DateTimeOffset.UtcNow.AddMonths(1).ToUnixTimeSeconds())
+                          .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(expMinutes).ToUnixTimeSeconds())
                           .AddClaim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                           .AddClaim("sub", userId)
                           .AddClaim("jti", Guid.NewGuid().ToString())

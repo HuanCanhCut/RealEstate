@@ -7,7 +7,7 @@ namespace UserAPI.Utils.Interfaces
 {
     public interface IJWT
     {
-        string GenerateToken(int userId);
+        string GenerateToken(int userId, string secretKey, int expMinutes);
         JwtDecoded ValidateToken(string token);
     }
 }

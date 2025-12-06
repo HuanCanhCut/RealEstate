@@ -14,6 +14,24 @@ namespace UserAPI.Services
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IJWT _jwt = jwt;
 
+        private (string access_token, string refresh_token) GenerateTokens(int userId)
+        {
+            try
+            {
+                string secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set");
+                string refreshSecretKey = Environment.GetEnvironmentVariable("JWT_REFRESH_SECRET_KEY")! ?? throw new Exception("JWT_REFRESH_SECRET_KEY is not set");
+
+                string accessToken = _jwt.GenerateToken(userId, secretKey, 30); // 30 minutes
+                string refreshToken = _jwt.GenerateToken(userId, refreshSecretKey, 60 * 24 * 30 * 6); // 6 months
+
+                return (accessToken, refreshToken);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
         public RegisterServiceResponse Register(string email, string password)
         {
             try
@@ -42,12 +60,14 @@ namespace UserAPI.Services
 
                 int insertedUserId = _userRepository.CreateUser(newUser);
 
-                string token = _jwt.GenerateToken(insertedUserId);
+
+                (string accessToken, string refreshToken) = GenerateTokens(insertedUserId);
 
                 return new RegisterServiceResponse()
                 {
                     user = newUser,
-                    meta = new MetaToken { access_token = token }
+                    access_token = accessToken,
+                    refresh_token = refreshToken
                 };
             }
             catch (Exception ex)
@@ -77,12 +97,13 @@ namespace UserAPI.Services
                     throw new UnauthorizedError("Tài khoản hoặc mật khẩu không đúng. Vui lòng thử lại");
                 }
 
-                string token = _jwt.GenerateToken(userExist.id);
+                (string access_token, string refresh_token) = GenerateTokens(userExist.id);
 
                 return new LoginServiceResponse()
                 {
                     user = userExist,
-                    meta = new MetaToken { access_token = token }
+                    access_token = access_token,
+                    refresh_token = refresh_token
                 };
             }
             catch (Exception ex)
