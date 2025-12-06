@@ -27,7 +27,7 @@ namespace UserAPI.Controllers
                 JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
                 UserModel? currentUser = _userService.GetUserById(decoded.sub);
 
-                return Ok(new ApiResponse<UserModel, object?>(currentUser)); 
+                return Ok(new ApiResponse<UserModel, object?>(currentUser));
             }
             catch (Exception ex)
             {
@@ -59,6 +59,29 @@ namespace UserAPI.Controllers
                 UserModel? updatedUser = _userService.UpdateCurrentUser(decoded.sub, request);
 
                 return Ok(new ApiResponse<UserModel, object?>(updatedUser));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet()]
+        public ActionResult<ApiResponse<List<UserModel>, MetaPagination>> getAllUsers([FromQuery] PaginationRequest query)
+        {
+            try
+            {
+                ServiceResposePagination<UserModel> users = _userService.GetAllUsers(query.page, query.per_page);
+
+                return Ok(new ApiResponse<List<UserModel>, MetaPagination>(
+                    data: users.data ?? new List<UserModel>(),
+                    meta: new MetaPagination(
+                        total: users.total,
+                        count: users.count,
+                        current_page: query.page,
+                        per_page: query.per_page
+                    )
+                ));
             }
             catch (Exception ex)
             {

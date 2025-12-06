@@ -99,7 +99,35 @@ namespace UserAPI.Repositories
                 ";
 
                 return _dbContext.ExecuteNonQuery(sql);
-            } catch (Exception)
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<UserModel> GetAllUsers(int page, int per_page)
+        {
+            try
+            {
+                int offset = (page - 1) * per_page;
+                string query = $"SELECT * FROM users LIMIT {per_page} OFFSET {offset}";
+                return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>() ?? new List<UserModel>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                string query = "SELECT COUNT(1) FROM users";
+                return Convert.ToInt32(_dbContext.ExecuteScalar(query));
+            }
+            catch (Exception)
             {
                 throw;
             }
