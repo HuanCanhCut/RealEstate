@@ -37,11 +37,10 @@ namespace UserAPI.Utils
             }
         }
 
-        public JwtDecoded ValidateToken(string token)
+        public JwtDecoded ValidateToken(string token, string secretKey)
         {
             try
             {
-                string secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set");
 
                 var json = JwtBuilder.Create()
                           .WithAlgorithm(new HMACSHA256Algorithm())
@@ -53,15 +52,15 @@ namespace UserAPI.Utils
             }
             catch (TokenNotYetValidException)
             {
-                throw new Exception("Failed to authenticate because of bad credentials or an invalid authorization header.");
+                throw new TokenNotYetValidException("Failed to authenticate because of bad credentials or an invalid authorization header.");
             }
             catch (TokenExpiredException)
             {
-                throw new Exception("Failed to authenticate because of expired token");
+                throw new TokenExpiredException("Failed to authenticate because of expired token");
             }
             catch (SignatureVerificationException)
             {
-                throw new Exception("Failed to authenticate because of bad credentials or an invalid authorization header.");
+                throw new TokenExpiredException("Failed to authenticate because of bad credentials or an invalid authorization header.");
             }
         }
     }

@@ -27,14 +27,14 @@ namespace UserAPI.Middlewares
                     return;
                 }
 
-                var authHeader = context.HttpContext.Request.Headers["Authorization"].ToString();
+                string token = context.HttpContext.Request.Cookies["access_token"];
 
-                if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                if (string.IsNullOrEmpty(token))
                 {
                     context.Result = new JsonResult(new
                     {
                         status_code = 401,
-                        message = "Failed to authenticate because of bad credentials or an invalid authorization header."
+                        message = "Failed to authenticate because no token provided."
                     })
                     {
                         StatusCode = 401
@@ -42,9 +42,7 @@ namespace UserAPI.Middlewares
                     return;
                 }
 
-                string token = authHeader.Substring(7);
-
-                JwtDecoded decoded = jwtToken.ValidateToken(token);
+                JwtDecoded decoded = jwtToken.ValidateToken(token, Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set"));
 
                 if (string.IsNullOrEmpty(decoded.sub.ToString()))
                 {
@@ -65,6 +63,11 @@ namespace UserAPI.Middlewares
             }
             catch (Exception ex)
             {
+
+                // clear cookies from client
+                context.HttpContext.Response.Cookies.Delete("access_token");
+                context.HttpContext.Response.Cookies.Delete("refresh_token");
+
                 context.Result = new JsonResult(new
                 {
                     status_code = 401,

@@ -8,6 +8,6 @@ namespace UserAPI.Utils.Interfaces
     public interface IJWT
     {
         string GenerateToken(int userId, string secretKey, int expMinutes);
-        JwtDecoded ValidateToken(string token);
+        JwtDecoded ValidateToken(string token, string secretKey);
     }
 }

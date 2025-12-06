@@ -64,7 +64,7 @@ namespace UserAPI.Services
         {
             try
             {
-                IList<PostModel>? result = _postRepository.GetPosts(request);
+                List<PostModel>? result = _postRepository.GetPosts(request);
                 int total = _postRepository.CountAll();
 
                 return new GetPostServiceResponse

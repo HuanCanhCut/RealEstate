@@ -83,7 +83,7 @@ namespace UserAPI.Repositories
             return rows.ToList();
         }
 
-        public static DataTable ConvertTo<T>(this IList<T> list)
+        public static DataTable ConvertTo<T>(this List<T> list)
         {
             DataTable table = CreateTable<T>();
             Type entityType = typeof(T);
@@ -103,7 +103,7 @@ namespace UserAPI.Repositories
 
             return table;
         }
-        public static List<T> ConvertTo<T>(IList<DataRow> rows)
+        public static List<T> ConvertTo<T>(List<DataRow> rows)
         {
             List<T> list = null;
 

@@ -9,5 +9,6 @@ namespace UserAPI.Services.Interfaces
         RegisterServiceResponse Register(string email, string password);
         LoginServiceResponse Login(string email, string password);
         void ChangePassword(string email, string password, string new_password);
+        (string newAccessToken, string newRefreshToken) RefreshToken(string refresh_token);
     }
 }
