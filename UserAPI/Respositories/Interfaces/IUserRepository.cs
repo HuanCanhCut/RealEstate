@@ -1,4 +1,5 @@
-﻿using UserAPI.Models;
+﻿using UserAPI.DTO.Request;
+using UserAPI.Models;
 
 namespace UserAPI.Repositories.Interfaces
 {
@@ -10,5 +11,7 @@ namespace UserAPI.Repositories.Interfaces
 
         UserModel? GetUserById(int id);
         UserModel? GetUserByNickname(string nickname);
+
+        int UpdateCurrentUser(int currentUserID, UpdateCurrentUserRequest request);
     }
 }

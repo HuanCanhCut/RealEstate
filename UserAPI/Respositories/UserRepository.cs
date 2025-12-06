@@ -1,4 +1,5 @@
-﻿using UserAPI.Models;
+﻿using UserAPI.DTO.Request;
+using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
 
 namespace UserAPI.Repositories
@@ -77,6 +78,28 @@ namespace UserAPI.Repositories
                 return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>()?.FirstOrDefault();
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int UpdateCurrentUser(int currentUserId, UpdateCurrentUserRequest request)
+        {
+            try
+            {
+                string sql = $@"
+                    UPDATE users
+                    SET 
+                        full_name = '{request.full_name}', 
+                        nickname = '{request.nickname}', 
+                        avatar = '{request.avatar_url}',
+                        phone_number = '{request.phone_number}',
+                        updated_at = NOW()
+                    WHERE id = {currentUserId}
+                ";
+
+                return _dbContext.ExecuteNonQuery(sql);
+            } catch (Exception)
             {
                 throw;
             }

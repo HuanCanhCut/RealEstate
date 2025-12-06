@@ -19,7 +19,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="DTO\ServiceResponse\" />
     <Folder Include="DTO\Response\" />
-    <Folder Include="DTO\Request\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Models\Enums\" />
     <Folder Include="Models\Interfaces\" />

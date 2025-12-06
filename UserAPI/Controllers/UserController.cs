@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserAPI.DTO.Request;
 using UserAPI.DTO.Response;
 using UserAPI.Middlewares;
 using UserAPI.Models;
@@ -41,6 +42,23 @@ namespace UserAPI.Controllers
             {
                 UserModel? user = _userService.GetUserByNickname(nickname);
                 return Ok(new ApiResponse<UserModel, object?>(user));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPut("me/update")]
+        public ActionResult<ApiResponse<UserModel, object?>> updateCurrentUser([FromBody] UpdateCurrentUserRequest request)
+        {
+            try
+            {
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                UserModel? updatedUser = _userService.UpdateCurrentUser(decoded.sub, request);
+
+                return Ok(new ApiResponse<UserModel, object?>(updatedUser));
             }
             catch (Exception ex)
             {
