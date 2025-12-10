@@ -1,4 +1,5 @@
 ﻿using UserAPI.DTO.Request;
+using UserAPI.DTO.Response;
 using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
 using UserAPI.Services.Interfaces;
@@ -87,5 +88,30 @@ namespace UserAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public ServiceResposePagination<UserModel> GetAllUsers(int page, int per_page)
+        {
+            try
+            {
+                List<UserModel> users = _userRepository.GetAllUsers(page, per_page);
+                int total = _userRepository.CountAll();
+                
+                return new ServiceResposePagination<UserModel>
+                {
+                    count = users.Count(),
+                    total = total,
+                    data = users,
+                };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
     }
 }

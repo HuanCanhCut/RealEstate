@@ -13,5 +13,7 @@ namespace UserAPI.Repositories.Interfaces
         UserModel? GetUserByNickname(string nickname);
 
         int UpdateCurrentUser(int currentUserID, UpdateCurrentUserRequest request);
+        List<UserModel> GetAllUsers(int page, int per_page);
+        int CountAll();
     }
 }
