@@ -111,7 +111,14 @@ namespace UserAPI.Repositories
             try
             {
                 int offset = (page - 1) * per_page;
-                string query = $"SELECT * FROM users LIMIT {per_page} OFFSET {offset}";
+                string query = $@"
+                    SELECT 
+                      users.*,
+                      COUNT(posts.id) as post_count
+                    FROM users
+                    LEFT JOIN posts ON posts.user_id = users.id
+                    GROUP BY users.id
+                    LIMIT {per_page} OFFSET {offset}";
                 return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>() ?? new List<UserModel>();
             }
             catch (Exception)

@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using UserAPI.Models.Enums;
 
 namespace UserAPI.Models
@@ -18,5 +18,9 @@ namespace UserAPI.Models
         public string? address { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
+
+
+        //các trường dành cho việc join
+        public long post_count { get; set; }
     }
 }
