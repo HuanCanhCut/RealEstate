@@ -106,3 +106,30 @@ ALTER TABLE post_details MODIFY deposit DECIMAL(14, 2);
 ALTER Table contracts MODIFY amount DECIMAL(14, 2);
 
 ALTER Table contracts MODIFY commission DECIMAL(14, 2);
+
+CREATE FULLTEXT INDEX post_title_address_idx ON posts (
+    title,
+    address,
+    administrative_address
+);
+
+ALTER TABLE categories ADD COLUMN `key` VARCHAR(255);
+
+ALTER TABLE categories
+modify column `key` VARCHAR(255) NOT NULL UNIQUE;
+
+CREATE TABLE refresh_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE blacklisted_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

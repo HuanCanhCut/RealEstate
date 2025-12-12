@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using UserAPI.Models.Enums;
 
 namespace UserAPI.Models

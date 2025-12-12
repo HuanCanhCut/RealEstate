@@ -1,4 +1,4 @@
-﻿using UserAPI.DTO.Request;
+using UserAPI.DTO.Request;
 using UserAPI.DTO.Response;
 using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
@@ -89,14 +89,14 @@ namespace UserAPI.Services
             }
         }
 
-        public ServiceResposePagination<UserModel> GetAllUsers(int page, int per_page)
+        public ServiceResponsePagination<UserModel> GetAllUsers(int page, int per_page)
         {
             try
             {
                 List<UserModel> users = _userRepository.GetAllUsers(page, per_page);
                 int total = _userRepository.CountAll();
-                
-                return new ServiceResposePagination<UserModel>
+
+                return new ServiceResponsePagination<UserModel>
                 {
                     count = users.Count(),
                     total = total,

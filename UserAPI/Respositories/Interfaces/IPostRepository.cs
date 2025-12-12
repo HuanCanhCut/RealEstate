@@ -8,11 +8,12 @@ using UserAPI.Models;
 
 namespace UserAPI.Respositories.Interfaces
 {
-    public interface IPostRepository
-    {
-        int CreatePost(CreatePostRequest post);
-        PostModel GetPostById(int id);
-        IList<PostModel> GetPosts(GetPostRequest request);
-        int Count();
-    }
+        public interface IPostRepository
+        {
+                int CreatePost(CreatePostRequest post);
+                PostModel GetPostById(int id);
+                List<PostModel> GetPosts(GetPostRequest request);
+                int CountAll();
+                List<PostModel> SearchPosts(string q);
+        }
 }

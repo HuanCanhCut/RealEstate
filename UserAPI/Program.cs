@@ -26,6 +26,7 @@ builder.Services.AddScoped<DbContext>(provider => new DbContext());
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // SERVICES
 builder.Services.AddScoped<IAuthService, AuthService>();
