@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using UserAPI.Models;
+using UserAPI.Respositories;
 using UserAPI.Utils;
 using UserAPI.Utils.Interfaces;
 
@@ -27,34 +29,28 @@ namespace UserAPI.Middlewares
                     return;
                 }
 
-                string token = context.HttpContext.Request.Cookies["access_token"];
+                string? token = context.HttpContext.Request.Cookies["access_token"];
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    context.Result = new JsonResult(new
-                    {
-                        status_code = 401,
-                        message = "Failed to authenticate because no token provided."
-                    })
-                    {
-                        StatusCode = 401
-                    };
-                    return;
+                    throw new Exception("Failed to authenticate because no token provided.");
+                }
+
+                // check token in blacklist
+                TokenRepository? tokenRepository = context.HttpContext.RequestServices.GetService<TokenRepository>();
+
+                BlacklistedTokenModel? blacklistedToken = tokenRepository?.GetBlacklistToken(token);
+
+                if (blacklistedToken != null)
+                {
+                    throw new Exception("Failed to authenticate because of bad credentials or an invalid authorization header.");
                 }
 
                 JwtDecoded decoded = jwtToken.ValidateToken(token, Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set"));
 
                 if (string.IsNullOrEmpty(decoded.sub.ToString()))
                 {
-                    context.Result = new JsonResult(new
-                    {
-                        status_code = 401,
-                        message = "Failed to authenticate because of expired token."
-                    })
-                    {
-                        StatusCode = 401
-                    };
-                    return;
+                    throw new Exception("Failed to authenticate because of expired token.");
                 }
 
                 context.HttpContext.Items["decoded"] = decoded;

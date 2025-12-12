@@ -93,6 +93,26 @@ namespace UserAPI.Controllers
             }
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            try
+            {
+                string? accessToken = Request.Cookies["access_token"];
+                string? refreshToken = Request.Cookies["refresh_token"];
+
+                Response.Cookies.Delete("access_token");
+                Response.Cookies.Delete("refresh_token");
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [VerifyToken]
         [HttpPatch("password")]
         public IActionResult ChangePassword([FromBody] ChangePasswordRequest changePassword)
         {
@@ -113,7 +133,7 @@ namespace UserAPI.Controllers
         {
             try
             {
-                string refreshToken = Request.Cookies["refresh_token"];
+                string? refreshToken = Request.Cookies["refresh_token"];
 
                 if (string.IsNullOrEmpty(refreshToken))
                 {
@@ -151,7 +171,7 @@ namespace UserAPI.Controllers
             {
                 if (ex is SignatureVerificationException)
                 {
-                    // clear cookies
+                    // clear cookies`
                     Response.Cookies.Delete("access_token");
                     Response.Cookies.Delete("refresh_token");
                 }

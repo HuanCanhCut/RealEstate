@@ -26,9 +26,9 @@ namespace UserAPI.Controllers
                 JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
                 UserModel? currentUser = _userService.GetUserById(decoded.sub);
 
-                return Ok(new ApiResponse<UserModel, object?>(currentUser)); 
+                return Ok(new ApiResponse<UserModel, object?>(currentUser));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -42,7 +42,7 @@ namespace UserAPI.Controllers
                 UserModel? user = _userService.GetUserByNickname(nickname);
                 return Ok(new ApiResponse<UserModel, object?>(user));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

@@ -196,5 +196,22 @@ namespace UserAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public void Logout(string refresh_token)
+        {
+            try
+            {
+                _tokenRepository.InsertBlacklistToken(refresh_token);
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
     }
 }
