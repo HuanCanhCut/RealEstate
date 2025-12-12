@@ -1,4 +1,6 @@
-﻿using UserAPI.Models;
+using UserAPI.DTO.Request;
+using UserAPI.DTO.Response;
+using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
 using UserAPI.Services.Interfaces;
 using static UserAPI.Errors.Error;
@@ -61,5 +63,55 @@ namespace UserAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public UserModel? UpdateCurrentUser(int currentUserId, UpdateCurrentUserRequest request)
+        {
+            try
+            {
+                int rowsAffected = _userRepository.UpdateCurrentUser(currentUserId, request);
+
+                if (rowsAffected == 0)
+                {
+                    throw new UnauthorizedError("Unauthorize");
+                }
+
+                UserModel? updatedUser = _userRepository.GetUserById(currentUserId);
+
+                return updatedUser;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public ServiceResponsePagination<UserModel> GetAllUsers(int page, int per_page)
+        {
+            try
+            {
+                List<UserModel> users = _userRepository.GetAllUsers(page, per_page);
+                int total = _userRepository.CountAll();
+
+                return new ServiceResponsePagination<UserModel>
+                {
+                    count = users.Count(),
+                    total = total,
+                    data = users,
+                };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
     }
 }

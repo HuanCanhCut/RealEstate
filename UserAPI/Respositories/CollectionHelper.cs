@@ -103,7 +103,7 @@ namespace UserAPI.Repositories
 
             return table;
         }
-        public static List<T> ConvertTo<T>(List<DataRow> rows)
+        public static List<T> ConvertTo<T>(IList<DataRow> rows)
         {
             List<T> list = null;
 

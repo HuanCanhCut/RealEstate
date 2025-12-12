@@ -1,4 +1,5 @@
-﻿using UserAPI.Models;
+using UserAPI.DTO.Request;
+using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
 
 namespace UserAPI.Repositories
@@ -75,6 +76,63 @@ namespace UserAPI.Repositories
             {
                 string query = @$"SELECT * FROM users WHERE MATCH (nickname) AGAINST ('{nickname}')";
                 return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>()?.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int UpdateCurrentUser(int currentUserId, UpdateCurrentUserRequest request)
+        {
+            try
+            {
+                string sql = $@"
+                    UPDATE users
+                    SET 
+                        full_name = '{request.full_name}', 
+                        nickname = '{request.nickname}', 
+                        avatar = '{request.avatar_url}',
+                        phone_number = '{request.phone_number}',
+                        updated_at = NOW()
+                    WHERE id = {currentUserId}
+                ";
+
+                return _dbContext.ExecuteNonQuery(sql);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<UserModel> GetAllUsers(int page, int per_page)
+        {
+            try
+            {
+                int offset = (page - 1) * per_page;
+                string query = $@"
+                    SELECT 
+                      users.*,
+                      COUNT(posts.id) as post_count
+                    FROM users
+                    LEFT JOIN posts ON posts.user_id = users.id
+                    GROUP BY users.id
+                    LIMIT {per_page} OFFSET {offset}";
+                return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>() ?? new List<UserModel>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                string query = "SELECT COUNT(1) FROM users";
+                return Convert.ToInt32(_dbContext.ExecuteScalar(query));
             }
             catch (Exception)
             {
