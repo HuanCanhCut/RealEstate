@@ -139,32 +139,50 @@ namespace UserAPI.Respositories
             try
             {
                 string sql = @$"
-                    SELECT 
+                    SELECT
                         *,
-                        (
-                            SELECT 
-                                    JSON_OBJECT(
-                                        'area', area,
-                                        'price', price,
-                                        'post_id', post_id
-                                    )
-                            FROM post_details
-                            WHERE post_details.post_id = posts.id
+
+                        JSON_OBJECT(
+                            'area', post_details.area,
+                            'price', post_details.price,
+                            'post_id', post_details.post_id
                         ) AS json_post_detail,
+
+                        JSON_OBJECT(
+                            'id', categories.id,
+                            'name', categories.name,
+                            'created_at', categories.created_at,
+                            'updated_at', categories.updated_at
+                        ) AS json_category,
+
+                        JSON_OBJECT(
+                            'id', users.id,
+                            'full_name', users.full_name,
+                            'avatar', users.avatar,
+                            'nickname', users.nickname,
+                            'post_count', user_post_count.post_count
+                        ) AS json_user,
+
                         (
-                            SELECT JSON_OBJECT(
-                                'id', id,
-                                'name', name,
-                                'created_at', created_at,
-                                'updated_at', updated_at
+                            SELECT EXISTS (
+                                SELECT 1
+                                FROM favorites
+                                WHERE favorites.user_id = users.id
+                                AND favorites.post_id = posts.id
                             )
-                            FROM categories
-                            WHERE categories.id = posts.category_id
-                        ) AS json_category
+                        ) AS is_favorite
                     FROM posts
-                    JOIN categories ON categories.id = posts.category_id 
                     JOIN post_details ON post_details.post_id = posts.id
-                    WHERE 1=1 
+                    JOIN categories ON categories.id = posts.category_id
+                    JOIN users ON users.id = posts.user_id
+
+                    LEFT JOIN (
+                        SELECT user_id, COUNT(*) AS post_count
+                        FROM posts
+                        GROUP BY user_id
+                    ) user_post_count ON user_post_count.user_id = users.id
+
+                    WHERE 1=1
                 ";
 
                 if (!String.IsNullOrEmpty(request.property_categories?.Length.ToString()))
@@ -190,6 +208,15 @@ namespace UserAPI.Respositories
                 sql += $" LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
+
+                foreach (DataRow row in table.Rows)
+                {
+                    if (row["is_favorite"] != DBNull.Value)
+                    {
+                        long value = Convert.ToInt64(row["is_favorite"]);
+                        row["is_favorite"] = value != 0;
+                    }
+                }
 
                 return table.ConvertTo<PostModel>();
 
