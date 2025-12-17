@@ -133,7 +133,6 @@ namespace UserAPI.Respositories
             }
         }
 
-        [AllowAnonymous]
         public List<PostModel>? GetPosts(GetPostRequest request)
         {
             try
@@ -269,6 +268,23 @@ namespace UserAPI.Respositories
 
                 return table.ConvertTo<PostModel>();
             }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int LikePost(int post_id, int user_id)
+        {
+            try
+            {
+                string sql = $@"
+                    INSERT INTO favorites (user_id, post_id) VALUES ({user_id}, {post_id});
+                ";
+
+                return _dbContext.ExecuteNonQuery(sql);
+            }
+
             catch (Exception)
             {
                 throw;

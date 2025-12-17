@@ -15,5 +15,6 @@ namespace UserAPI.Respositories.Interfaces
         List<PostModel> GetPosts(GetPostRequest request);
         int CountAll();
         List<PostModel> SearchPosts(string q);
+        int LikePost(int post_id, int user_id);
     }
 }

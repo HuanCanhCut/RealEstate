@@ -13,5 +13,6 @@ namespace UserAPI.Services.Interfaces
         PostModel CreatePost(CreatePostRequest post);
         GetPostServiceResponse GetPosts(GetPostRequest request);
         List<PostModel> SearchPosts(string q);
+        PostModel LikePost(int post_id, int user_id);
     }
 }

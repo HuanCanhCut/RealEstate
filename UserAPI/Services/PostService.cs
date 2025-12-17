@@ -109,5 +109,41 @@ namespace UserAPI.Services
                 });
             }
         }
+
+        public PostModel LikePost(int post_id, int user_id)
+        {
+            try
+            {
+                PostModel post = _postRepository.GetPostById(post_id);
+
+                if (post == null)
+                {
+                    throw new NotFoundError("Bài đăng không tồn tại");
+                }
+
+                post.is_favorite = !post.is_favorite;
+
+                int result = _postRepository.LikePost(post_id: post_id, user_id: user_id);
+
+                if (result <= 0)
+                {
+                    throw new InternalServerError("Lỗi khi thích bài đăng");
+                }
+
+                return post;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message, new
+                {
+                    stack_trace = ex.StackTrace
+                });
+            }
+        }
     }
 }

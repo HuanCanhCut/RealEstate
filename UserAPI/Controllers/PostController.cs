@@ -11,6 +11,7 @@ using UserAPI.DTO.ServiceResponse;
 using UserAPI.Middlewares;
 using UserAPI.Models;
 using UserAPI.Services.Interfaces;
+using UserAPI.Utils;
 using static UserAPI.Errors.Error;
 
 namespace UserAPI.Controllers
@@ -79,6 +80,29 @@ namespace UserAPI.Controllers
                 return Ok(new ApiResponse<List<PostModel>, object?>(
                     data: posts
                 ));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [VerifyToken]
+        [HttpPost("{id}/like")]
+        public ActionResult<ApiResponse<PostModel, object?>> LikePost([FromRoute] int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    throw new BadRequestError("post_id phải lớn hơn 0");
+                }
+
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                PostModel post = _postService.LikePost(post_id: id, user_id: decoded.sub);
+
+                return Ok(new ApiResponse<PostModel, object?>(post));
             }
             catch (Exception)
             {
