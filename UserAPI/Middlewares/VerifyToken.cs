@@ -1,3 +1,4 @@
+using JWT.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using UserAPI.Models;
@@ -63,6 +64,12 @@ namespace UserAPI.Middlewares
                 // clear cookies from client
                 context.HttpContext.Response.Cookies.Delete("access_token");
                 context.HttpContext.Response.Cookies.Delete("refresh_token");
+
+                // if token is expired, set header x-refresh-token-required
+                if (ex is TokenExpiredException)
+                {
+                    context.HttpContext.Response.Headers.Append("x-refresh-token-required", "true");
+                }
 
                 context.Result = new JsonResult(new
                 {
