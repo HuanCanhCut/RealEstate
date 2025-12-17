@@ -121,6 +121,11 @@ namespace UserAPI.Services
                     throw new NotFoundError("Bài đăng không tồn tại");
                 }
 
+                if (post.is_favorite)
+                {
+                    throw new BadRequestError("Bài đăng đã được thích");
+                }
+
                 post.is_favorite = !post.is_favorite;
 
                 int result = _postRepository.LikePost(post_id: post_id, user_id: user_id);
@@ -131,6 +136,44 @@ namespace UserAPI.Services
                 }
 
                 return post;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message, new
+                {
+                    stack_trace = ex.StackTrace
+                });
+            }
+        }
+
+        public void UnlikePost(int post_id, int user_id)
+        {
+            try
+            {
+                PostModel post = _postRepository.GetPostById(post_id);
+
+                if (post == null)
+                {
+                    throw new NotFoundError("Bài đăng không tồn tại");
+                }
+
+                if (!post.is_favorite)
+                {
+                    throw new BadRequestError("Bài đăng đã không được thích");
+                }
+
+                int result = _postRepository.UnlikePost(post_id: post_id, user_id: user_id);
+
+                if (result <= 0)
+                {
+                    throw new InternalServerError("Lỗi khi bỏ thích bài đăng");
+                }
+
             }
             catch (Exception ex)
             {

@@ -109,5 +109,29 @@ namespace UserAPI.Controllers
                 throw;
             }
         }
+
+        [VerifyToken]
+        [HttpDelete("{id}/unlike")]
+        public ActionResult<ApiResponse<PostModel, object?>> UnlikePost([FromRoute] int id)
+        {
+            try
+            {
+
+                if (id <= 0)
+                {
+                    throw new BadRequestError("post_id phải lớn hơn 0");
+                }
+
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                _postService.UnlikePost(post_id: id, user_id: decoded.sub);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -116,9 +116,18 @@ namespace UserAPI.Respositories
                                 )
                             FROM post_details
                             WHERE post_details.post_id = posts.id
-                        ) AS json_post_detail
+                        ) AS json_post_detail,
+                        (
+                            SELECT EXISTS (
+                                SELECT 1
+                                FROM favorites
+                                WHERE favorites.user_id = users.id
+                                AND favorites.post_id = posts.id
+                            )
+                        ) AS is_favorite
                     FROM
                         posts
+                    JOIN users ON users.id = posts.user_id
                     WHERE
                         posts.id = {id};
                 ";
@@ -285,6 +294,22 @@ namespace UserAPI.Respositories
                 return _dbContext.ExecuteNonQuery(sql);
             }
 
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int UnlikePost(int post_id, int user_id)
+        {
+            try
+            {
+                string sql = $@"
+                    DELETE FROM favorites WHERE user_id = {user_id} AND post_id = {post_id};
+                ";
+
+                return _dbContext.ExecuteNonQuery(sql);
+            }
             catch (Exception)
             {
                 throw;

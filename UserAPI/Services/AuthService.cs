@@ -25,7 +25,7 @@ namespace UserAPI.Services
                 string secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set");
                 string refreshSecretKey = Environment.GetEnvironmentVariable("JWT_REFRESH_SECRET_KEY")! ?? throw new Exception("JWT_REFRESH_SECRET_KEY is not set");
 
-                string accessToken = _jwt.GenerateToken(userId, secretKey, 1); // 30 minutes
+                string accessToken = _jwt.GenerateToken(userId, secretKey, 30); // 30 minutes
                 string refreshToken = _jwt.GenerateToken(userId, refreshSecretKey, 60 * 24 * 30 * 6); // 6 months
 
                 return (accessToken, refreshToken);
