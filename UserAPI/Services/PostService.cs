@@ -188,5 +188,39 @@ namespace UserAPI.Services
                 });
             }
         }
+
+        public PostModel UpdatePost(int id, UpdatePostRequest request)
+        {
+            try
+            {
+                PostModel post = _postRepository.GetPostById(id);
+
+                if (post == null)
+                {
+                    throw new NotFoundError("Bài đăng không tồn tại");
+                }
+
+                int rowAffected = _postRepository.UpdatePost(id, request);
+
+                if (rowAffected <= 0)
+                {
+                    throw new InternalServerError("Lỗi khi cập nhật bài đăng");
+                }
+
+                return this.GetPostById(id);
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message, new
+                {
+                    stack_trace = ex.StackTrace
+                });
+            }
+        }
     }
 }

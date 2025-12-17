@@ -133,5 +133,21 @@ namespace UserAPI.Controllers
                 throw;
             }
         }
+
+        [VerifyToken]
+        [HttpPut("{id}/update")]
+        public ActionResult<ApiResponse<PostModel, object?>> UpdatePost([FromRoute] int id, [FromBody] UpdatePostRequest request)
+        {
+            try
+            {
+                PostModel post = _postService.UpdatePost(id, request);
+
+                return Ok(new ApiResponse<PostModel, object?>(post));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

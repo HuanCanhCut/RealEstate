@@ -97,26 +97,25 @@ namespace UserAPI.Respositories
                 string sql = $@"
                     SELECT
                         *,
-                        (
-                            SELECT 
-                                JSON_ARRAYAGG(
-                                    JSON_OBJECT(
-                                        'id', id,
-                                        'bedrooms', bedrooms,
-                                        'bathrooms', bathrooms,
-                                        'balcony', balcony,
-                                        'main_door', main_door,
-                                        'legal_documents', legal_documents,
-                                        'interior_status', interior_status,
-                                        'area', area,
-                                        'price', price,
-                                        'deposit', deposit,
-                                        'post_id', post_id
-                                    )
-                                )
-                            FROM post_details
-                            WHERE post_details.post_id = posts.id
+                        JSON_OBJECT(
+                            'area', post_details.area,
+                            'price', post_details.price,
+                            'post_id', post_details.post_id
                         ) AS json_post_detail,
+
+                        JSON_OBJECT(
+                            'id', categories.id,
+                            'name', categories.name,
+                            'created_at', categories.created_at,
+                            'updated_at', categories.updated_at
+                        ) AS json_category,
+
+                        JSON_OBJECT(
+                            'id', users.id,
+                            'full_name', users.full_name,
+                            'avatar', users.avatar,
+                            'nickname', users.nickname
+                        ) AS json_user,
                         (
                             SELECT EXISTS (
                                 SELECT 1
@@ -125,12 +124,15 @@ namespace UserAPI.Respositories
                                 AND favorites.post_id = posts.id
                             )
                         ) AS is_favorite
-                    FROM
-                        posts
+                    FROM posts
+                    JOIN post_details ON post_details.post_id = posts.id
+                    JOIN categories ON categories.id = posts.category_id
                     JOIN users ON users.id = posts.user_id
-                    WHERE
-                        posts.id = {id};
+
+                    WHERE posts.id = {id}
                 ";
+
+                Console.WriteLine(sql);
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
@@ -306,6 +308,48 @@ namespace UserAPI.Respositories
             {
                 string sql = $@"
                     DELETE FROM favorites WHERE user_id = {user_id} AND post_id = {post_id};
+                ";
+
+                return _dbContext.ExecuteNonQuery(sql);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int UpdatePost(int id, UpdatePostRequest request)
+        {
+            try
+            {
+                string sql = $@"
+                    UPDATE 
+                        posts 
+                    SET 
+                        title = '{request.title}',
+                        description = '{request.description}',
+                        address = '{request.address}',
+                        administrative_address = '{request.administrative_address}',
+                        project_type = '{request.project_type}',
+                        images = '{request.images}',
+                        category_id = {request.category_id},
+                        user_id = {request.user_id},
+                        role = 'user' 
+                    WHERE id = {id};
+
+                    UPDATE 
+                        post_details 
+                    SET 
+                        bedrooms = {request.details.bedrooms},
+                        bathrooms = {request.details.bathrooms},
+                        balcony = '{request.details.balcony}',
+                        main_door = '{request.details.main_door}',
+                        legal_documents = '{request.details.legal_documents}',
+                        interior_status = '{request.details.interior_status}',
+                        area = {request.details.area},
+                        price = {request.details.price},
+                        deposit = {request.details.deposit}
+                    WHERE post_id = {id};
                 ";
 
                 return _dbContext.ExecuteNonQuery(sql);
