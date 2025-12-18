@@ -149,5 +149,28 @@ namespace UserAPI.Controllers
                 throw;
             }
         }
+
+        [VerifyToken]
+        [HttpDelete("{post_id}")]
+        public IActionResult DeletePost([FromRoute] int post_id)
+        {
+            try
+            {
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                if (post_id <= 0)
+                {
+                    throw new BadRequestError("post_id phải lớn hơn 0");
+                }
+
+                _postService.DeletePost(post_id, decoded.sub);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

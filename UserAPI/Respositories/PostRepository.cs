@@ -132,8 +132,6 @@ namespace UserAPI.Respositories
                     WHERE posts.id = {id}
                 ";
 
-                Console.WriteLine(sql);
-
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
                 return table.ConvertTo<PostModel>()?.FirstOrDefault();
@@ -350,6 +348,22 @@ namespace UserAPI.Respositories
                         price = {request.details.price},
                         deposit = {request.details.deposit}
                     WHERE post_id = {id};
+                ";
+
+                return _dbContext.ExecuteNonQuery(sql);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int DeletePost(int post_id, int user_id)
+        {
+            try
+            {
+                string sql = $@"
+                    DELETE FROM posts WHERE id = {post_id} AND user_id = {user_id};
                 ";
 
                 return _dbContext.ExecuteNonQuery(sql);

@@ -16,5 +16,7 @@ namespace UserAPI.Services.Interfaces
         PostModel LikePost(int post_id, int user_id);
         void UnlikePost(int post_id, int user_id);
         PostModel UpdatePost(int id, UpdatePostRequest request);
+
+        void DeletePost(int post_id, int user_id);
     }
 }

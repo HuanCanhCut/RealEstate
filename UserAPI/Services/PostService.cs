@@ -222,5 +222,42 @@ namespace UserAPI.Services
                 });
             }
         }
+
+        public void DeletePost(int post_id, int user_id)
+        {
+            try
+            {
+                PostModel post = _postRepository.GetPostById(post_id);
+
+                if (post == null)
+                {
+                    throw new NotFoundError("Bài đăng không tồn tại");
+                }
+
+                if (post.json_user?.id != user_id)
+                {
+                    throw new ForbiddenError("Bạn không có quyền xóa bài đăng này");
+                }
+
+                int rowAffected = _postRepository.DeletePost(post_id, user_id);
+
+                if (rowAffected <= 0)
+                {
+                    throw new InternalServerError("Lỗi khi xóa bài đăng");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message, new
+                {
+                    stack_trace = ex.StackTrace
+                });
+            }
+        }
     }
 }

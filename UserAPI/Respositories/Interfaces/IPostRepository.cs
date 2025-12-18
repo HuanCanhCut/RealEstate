@@ -20,5 +20,7 @@ namespace UserAPI.Respositories.Interfaces
         int UnlikePost(int post_id, int user_id);
 
         int UpdatePost(int id, UpdatePostRequest request);
+
+        int DeletePost(int post_id, int user_id);
     }
 }
