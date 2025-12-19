@@ -6,7 +6,7 @@ using UserAPI.DTO.Request;
 using UserAPI.DTO.ServiceResponse;
 using UserAPI.Models;
 
-namespace UserAPI.Respositories.Interfaces
+namespace UserAPI.Repositories.Interfaces
 {
     public interface IPostRepository
     {

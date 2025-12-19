@@ -8,9 +8,9 @@ using UserAPI.DTO.Request;
 using UserAPI.DTO.ServiceResponse;
 using UserAPI.Models;
 using UserAPI.Repositories;
-using UserAPI.Respositories.Interfaces;
+using UserAPI.Repositories.Interfaces;
 
-namespace UserAPI.Respositories
+namespace UserAPI.Repositories
 {
     public class PostRepository(DbContext dbContext) : IPostRepository
     {

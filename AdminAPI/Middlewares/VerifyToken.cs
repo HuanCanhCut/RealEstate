@@ -1,12 +1,12 @@
 using JWT.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using UserAPI.Models;
-using UserAPI.Repositories;
-using UserAPI.Utils;
-using UserAPI.Utils.Interfaces;
+using AdminAPI.Models;
+using AdminAPI.Utils;
+using AdminAPI.Utils.Interfaces;
+using AdminAPI.Repositories;
 
-namespace UserAPI.Middlewares
+namespace AdminAPI.Middlewares
 {
     [AttributeUsage(AttributeTargets.All)]
     public class VerifyTokenAttribute : Attribute, IAsyncActionFilter
