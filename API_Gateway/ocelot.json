@@ -38,6 +38,19 @@
           "Port": 7134
         }
       ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/test/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "DownstreamPathTemplate": "/api/test/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7124
+        }
+      ]
     }
   ]
 }

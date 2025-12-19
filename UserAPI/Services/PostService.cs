@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using UserAPI.DTO.Request;
 using UserAPI.DTO.ServiceResponse;
 using UserAPI.Models;
-using UserAPI.Respositories;
-using UserAPI.Respositories.Interfaces;
+using UserAPI.Repositories.Interfaces;
 using UserAPI.Services.Interfaces;
 using static UserAPI.Errors.Error;
 

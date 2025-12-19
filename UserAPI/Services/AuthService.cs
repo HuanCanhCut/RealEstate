@@ -1,10 +1,8 @@
 ﻿using JWT.Exceptions;
-using UserAPI.DTO.Response;
 using UserAPI.DTO.ServiceResponse;
 using UserAPI.Models;
 using UserAPI.Models.Enums;
 using UserAPI.Repositories.Interfaces;
-using UserAPI.Respositories.Interfaces;
 using UserAPI.Services.Interfaces;
 using UserAPI.Utils;
 using UserAPI.Utils.Interfaces;

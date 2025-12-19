@@ -14,8 +14,6 @@ namespace UserAPI.Services
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-
-
         }
 
         public UserModel GetUserById(int id)
