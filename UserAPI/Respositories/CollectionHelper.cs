@@ -152,7 +152,12 @@ namespace UserAPI.Repositories
                         object value = row[column.ColumnName];
                         if (value != DBNull.Value)
                         {
-                            if (column.ColumnName.Contains("json"))
+                            if (type == typeof(bool))
+                            {
+                                prop.SetValue(obj, Convert.ToBoolean(value), null);
+                            }
+
+                            else if (column.ColumnName.Contains("json"))
                             {
                                 prop.SetValue(obj, MessageConvert.DeserializeObject(("" + value).Replace("$", ""), type), null);
                             }

@@ -169,12 +169,9 @@ namespace UserAPI.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is SignatureVerificationException)
-                {
-                    // clear cookies`
-                    Response.Cookies.Delete("access_token");
-                    Response.Cookies.Delete("refresh_token");
-                }
+                // clear cookies
+                Response.Cookies.Delete("access_token");
+                Response.Cookies.Delete("refresh_token");
 
                 throw;
             }

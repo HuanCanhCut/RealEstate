@@ -11,6 +11,7 @@ using UserAPI.DTO.ServiceResponse;
 using UserAPI.Middlewares;
 using UserAPI.Models;
 using UserAPI.Services.Interfaces;
+using UserAPI.Utils;
 using static UserAPI.Errors.Error;
 
 namespace UserAPI.Controllers
@@ -79,6 +80,92 @@ namespace UserAPI.Controllers
                 return Ok(new ApiResponse<List<PostModel>, object?>(
                     data: posts
                 ));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [VerifyToken]
+        [HttpPost("{id}/like")]
+        public ActionResult<ApiResponse<PostModel, object?>> LikePost([FromRoute] int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    throw new BadRequestError("post_id phải lớn hơn 0");
+                }
+
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                PostModel post = _postService.LikePost(post_id: id, user_id: decoded.sub);
+
+                return Ok(new ApiResponse<PostModel, object?>(post));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [VerifyToken]
+        [HttpDelete("{id}/unlike")]
+        public ActionResult<ApiResponse<PostModel, object?>> UnlikePost([FromRoute] int id)
+        {
+            try
+            {
+
+                if (id <= 0)
+                {
+                    throw new BadRequestError("post_id phải lớn hơn 0");
+                }
+
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                _postService.UnlikePost(post_id: id, user_id: decoded.sub);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [VerifyToken]
+        [HttpPut("{id}/update")]
+        public ActionResult<ApiResponse<PostModel, object?>> UpdatePost([FromRoute] int id, [FromBody] UpdatePostRequest request)
+        {
+            try
+            {
+                PostModel post = _postService.UpdatePost(id, request);
+
+                return Ok(new ApiResponse<PostModel, object?>(post));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [VerifyToken]
+        [HttpDelete("{post_id}")]
+        public IActionResult DeletePost([FromRoute] int post_id)
+        {
+            try
+            {
+                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+
+                if (post_id <= 0)
+                {
+                    throw new BadRequestError("post_id phải lớn hơn 0");
+                }
+
+                _postService.DeletePost(post_id, decoded.sub);
+
+                return NoContent();
             }
             catch (Exception)
             {
