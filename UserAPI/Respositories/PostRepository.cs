@@ -96,9 +96,9 @@ namespace UserAPI.Respositories
             {
                 string sql = $@"
                     SELECT
-                        *,
+                        posts.*,
                         (
-                            SELECT 
+                                    SELECT 
                                 JSON_ARRAYAGG(
                                     JSON_OBJECT(
                                         'id', id,
@@ -116,11 +116,25 @@ namespace UserAPI.Respositories
                                 )
                             FROM post_details
                             WHERE post_details.post_id = posts.id
-                        ) AS json_post_detail
+                        ) AS json_post_detail,
+                        (
+                            SELECT 
+                                JSON_ARRAYAGG(
+                                    JSON_OBJECT(
+                                        'id',id,
+                                        'user_id', user_id,
+                                        'post_id', post_id,
+                                        'created_at', created_at,
+                                        'updated_at', updated_at
+                                    )
+                                )
+                            FROM favorites
+                            WHERE favorites.post_id = posts.id
+                        ) AS json_favorites
                     FROM
                         posts
                     WHERE
-                        posts.id = {id};
+                        posts.id = 1;
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);

@@ -12,5 +12,6 @@ namespace UserAPI.Services.Interfaces
     {
         PostModel CreatePost(CreatePostRequest post);
         GetPostServiceResponse GetPosts(GetPostRequest request);
+        PostModel GetPostById(int id);
     }
 }
