@@ -1,0 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AdminAPI.Utils.Interfaces
+{
+    public interface IJWT
+    {
+        string GenerateToken(int userId, string secretKey, int expMinutes);
+        JwtDecoded ValidateToken(string token, string secretKey);
+    }
+}

@@ -23,5 +23,8 @@ namespace UserAPI.Models
         public CategoryModel? json_category { get; set; }
         public UserModel? json_user { get; set; }
         public PostDetailModel? json_post_detail { get; set; }
+
+        // properties for additional information
+        public bool is_favorite { get; set; } = false;
     }
 }

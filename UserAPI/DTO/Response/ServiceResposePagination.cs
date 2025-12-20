@@ -1,6 +1,6 @@
 ﻿namespace UserAPI.DTO.Response
 {
-    public class ServiceResposePagination <T>
+    public class ServiceResponsePagination<T>
     {
         public List<T> data { get; set; }
         public int total { get; set; }

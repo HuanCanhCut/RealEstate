@@ -16,16 +16,14 @@ namespace UserAPI.Utils
 
     public class JWT : IJWT
     {
-        public string GenerateToken(int userId)
+        public string GenerateToken(int userId, string secretKey, int expMinutes)
         {
             try
             {
-                string secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set");
-
                 string token = JwtBuilder.Create()
                           .WithAlgorithm(new HMACSHA256Algorithm())
                           .WithSecret(secretKey)
-                          .AddClaim("exp", DateTimeOffset.UtcNow.AddMonths(1).ToUnixTimeSeconds())
+                          .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(expMinutes).ToUnixTimeSeconds())
                           .AddClaim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                           .AddClaim("sub", userId)
                           .AddClaim("jti", Guid.NewGuid().ToString())
@@ -39,11 +37,10 @@ namespace UserAPI.Utils
             }
         }
 
-        public JwtDecoded ValidateToken(string token)
+        public JwtDecoded ValidateToken(string token, string secretKey)
         {
             try
             {
-                string secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")! ?? throw new Exception("JWT_SECRET_KEY is not set");
 
                 var json = JwtBuilder.Create()
                           .WithAlgorithm(new HMACSHA256Algorithm())
@@ -55,15 +52,15 @@ namespace UserAPI.Utils
             }
             catch (TokenNotYetValidException)
             {
-                throw new Exception("Failed to authenticate because of bad credentials or an invalid authorization header.");
+                throw new TokenNotYetValidException("Failed to authenticate because of bad credentials or an invalid authorization header.");
             }
             catch (TokenExpiredException)
             {
-                throw new Exception("Failed to authenticate because of expired token");
+                throw new TokenExpiredException("Failed to authenticate because of expired token");
             }
             catch (SignatureVerificationException)
             {
-                throw new Exception("Failed to authenticate because of bad credentials or an invalid authorization header.");
+                throw new TokenExpiredException("Failed to authenticate because of bad credentials or an invalid authorization header.");
             }
         }
     }

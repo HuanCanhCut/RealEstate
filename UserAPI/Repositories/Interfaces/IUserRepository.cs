@@ -1,4 +1,4 @@
-﻿using UserAPI.DTO.Request;
+using UserAPI.DTO.Request;
 using UserAPI.Models;
 
 namespace UserAPI.Repositories.Interfaces

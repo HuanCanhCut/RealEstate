@@ -29,7 +29,7 @@ namespace UserAPI.Controllers
 
                 return Ok(new ApiResponse<UserModel, object?>(currentUser));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -71,7 +71,7 @@ namespace UserAPI.Controllers
         {
             try
             {
-                ServiceResposePagination<UserModel> users = _userService.GetAllUsers(query.page, query.per_page);
+                ServiceResponsePagination<UserModel> users = _userService.GetAllUsers(query.page, query.per_page);
 
                 return Ok(new ApiResponse<List<UserModel>, MetaPagination>(
                     data: users.data ?? new List<UserModel>(),
