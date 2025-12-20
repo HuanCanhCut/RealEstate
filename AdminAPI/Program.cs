@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AdminAPI.Middlewares;
 using AdminAPI.Repositories;
+using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Utils;
 using AdminAPI.Utils.Interfaces;
 
@@ -17,8 +18,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<DbContext, DbContext>();
 
-// UTILS
+// REPOSITORIES
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
+// UTILS
 builder.Services.AddScoped<IJWT, AdminAPI.Utils.JWT>();
 
 var app = builder.Build();

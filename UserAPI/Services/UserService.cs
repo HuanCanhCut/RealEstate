@@ -24,7 +24,7 @@ namespace UserAPI.Services
 
                 if (user == null)
                 {
-                    throw new UnauthorizedError("Unauthorize");
+                    throw new NotFoundError("Không tìm thấy người dùng này!");
                 }
                 return user;
             }
@@ -47,7 +47,7 @@ namespace UserAPI.Services
 
                 if (user == null)
                 {
-                    throw new UnauthorizedError("Không tìm thấy người dùng này!");
+                    throw new NotFoundError("Không tìm thấy người dùng này!");
                 }
                 return user;
             }

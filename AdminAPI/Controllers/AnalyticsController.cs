@@ -7,13 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdminAPI.Controllers
 {
     [ApiController]
-    [Route("api/test")]
-    public class TestController : ControllerBase
+    [Route("api/analytics")]
+    public class AnalyticsController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok("Hello World");
-        }
+
     }
 }
