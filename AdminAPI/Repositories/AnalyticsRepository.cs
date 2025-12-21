@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AdminAPI.DTO.Response;
 using AdminAPI.Repositories.Interfaces;
 
 namespace AdminAPI.Repositories
@@ -45,6 +46,30 @@ namespace AdminAPI.Repositories
                     Convert.ToInt32(table.Rows[0]["pending_posts"]),
                     Convert.ToInt32(table.Rows[0]["total_users"])
                 );
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<AnalyticsCategoryPercent> GetCategoryPercentage()
+        {
+            try
+            {
+                string sql = @$"
+                    SELECT
+                        categories.*,
+                        COUNT(posts.id) * 100.0 / (SELECT COUNT(*) FROM posts) AS percentage
+                    FROM
+                        categories
+                    JOIN posts ON posts.category_id = categories.id
+                    GROUP BY categories.id
+                ";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+                return table.ConvertTo<AnalyticsCategoryPercent>() ?? [];
             }
             catch (System.Exception)
             {

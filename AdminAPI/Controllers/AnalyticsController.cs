@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdminAPI.DTO.Request;
 using AdminAPI.DTO.Response;
+using AdminAPI.Middlewares;
 using AdminAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using static AdminAPI.Errors.Error;
 
 namespace AdminAPI.Controllers
 {
+    [VerifyToken]
+    [VerifyAdmin]
     [ApiController]
     [Route("api/analytics")]
     public class AnalyticsController(IAnalyticsService analyticsService) : ControllerBase
@@ -19,14 +22,38 @@ namespace AdminAPI.Controllers
         [HttpGet("overview")]
         public ActionResult<ApiResponse<AnalyticsOverviewResponse, object?>> GetOverview([FromQuery] OverviewRequest request)
         {
-            if (request.end_date < request.start_date)
+            try
             {
-                throw new BadRequestError("end date must be greater than or equal to start date");
+
+                if (request.end_date < request.start_date)
+                {
+                    throw new BadRequestError("end date must be greater than or equal to start date");
+                }
+
+                AnalyticsOverviewResponse response = _analyticsService.GetOverview(request.start_date, request.end_date);
+
+                return Ok(new ApiResponse<AnalyticsOverviewResponse, object?>(response));
             }
-
-            AnalyticsOverviewResponse response = _analyticsService.GetOverview(request.start_date, request.end_date);
-
-            return Ok(new ApiResponse<AnalyticsOverviewResponse, object?>(response));
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
+        [HttpGet("category/percentage")]
+        public ActionResult<ApiResponse<List<AnalyticsCategoryPercent>, object?>> GetCategoryPercentage()
+        {
+            try
+            {
+                List<AnalyticsCategoryPercent> response = _analyticsService.GetCategoryPercentage();
+
+                return Ok(new ApiResponse<List<AnalyticsCategoryPercent>, object?>(response));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

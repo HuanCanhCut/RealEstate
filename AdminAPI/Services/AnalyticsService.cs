@@ -45,5 +45,23 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public List<AnalyticsCategoryPercent> GetCategoryPercentage()
+        {
+            try
+            {
+                return _analyticsRepository.GetCategoryPercentage();
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+
+            }
+        }
     }
 }

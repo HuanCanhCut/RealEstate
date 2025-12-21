@@ -9,5 +9,7 @@ namespace AdminAPI.Services.Interfaces
     public interface IAnalyticsService
     {
         public AnalyticsOverviewResponse GetOverview(DateTime startDate, DateTime endDate);
+
+        public List<AnalyticsCategoryPercent> GetCategoryPercentage();
     }
 }

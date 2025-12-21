@@ -32,7 +32,7 @@ namespace AdminAPI.Middlewares
                     return;
                 }
 
-                UserRepository userRepository = context.HttpContext.RequestServices.GetRequiredService<UserRepository>();
+                IUserRepository userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
 
                 UserModel? user = userRepository.GetUserById(decoded.sub);
 
