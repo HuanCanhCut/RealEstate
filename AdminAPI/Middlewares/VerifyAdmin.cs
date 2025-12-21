@@ -41,7 +41,7 @@ namespace AdminAPI.Middlewares
                     context.Result = new JsonResult(new
                     {
                         status_code = 404,
-                        message = "x"
+                        message = "Failed to determine admin because user not found."
                     })
                     {
                         StatusCode = 404

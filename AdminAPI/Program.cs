@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 using AdminAPI.Middlewares;
 using AdminAPI.Repositories;
 using AdminAPI.Repositories.Interfaces;
+using AdminAPI.Services;
+using AdminAPI.Services.Interfaces;
 using AdminAPI.Utils;
 using AdminAPI.Utils.Interfaces;
 
@@ -16,11 +18,16 @@ builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// DATABASE
 builder.Services.AddScoped<DbContext, DbContext>();
+
+// SERVICES
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
 
 // UTILS
 builder.Services.AddScoped<IJWT, AdminAPI.Utils.JWT>();

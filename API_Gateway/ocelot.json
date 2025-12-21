@@ -41,7 +41,7 @@
     },
 
     {
-      "UpstreamPathTemplate": "/api/test/{everything}",
+      "UpstreamPathTemplate": "/api/analytics/{everything}",
       "UpstreamHttpMethod": ["GET", "POST", "PUT", "PATCH", "DELETE"],
       "DownstreamPathTemplate": "/api/analytics/{everything}",
       "DownstreamScheme": "https",

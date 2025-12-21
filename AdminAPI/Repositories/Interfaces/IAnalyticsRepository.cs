@@ -1,0 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AdminAPI.Repositories.Interfaces
+{
+    public interface IAnalyticsRepository
+    {
+        public record Overview(int total_posts, int approved_posts, int pending_posts, int users);
+        public Overview GetOverview(DateTime startDate, DateTime endDate);
+    }
+}
