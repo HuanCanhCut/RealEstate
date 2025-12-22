@@ -7,5 +7,8 @@ namespace AdminAPI.Models
         public required string key { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
+
+        // For analytics
+        public required decimal percentage { get; set; }
     }
 }

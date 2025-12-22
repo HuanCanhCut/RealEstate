@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AdminAPI.DTO.Response;
+using AdminAPI.Models;
 using AdminAPI.Repositories.Interfaces;
 
 namespace AdminAPI.Repositories
@@ -53,7 +54,7 @@ namespace AdminAPI.Repositories
             }
         }
 
-        public List<AnalyticsCategoryPercent> GetCategoryPercentage()
+        public List<CategoryModel> GetCategories()
         {
             try
             {
@@ -69,7 +70,7 @@ namespace AdminAPI.Repositories
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
-                return table.ConvertTo<AnalyticsCategoryPercent>() ?? [];
+                return table.ConvertTo<CategoryModel>() ?? [];
             }
             catch (System.Exception)
             {

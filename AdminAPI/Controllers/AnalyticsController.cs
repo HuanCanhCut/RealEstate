@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AdminAPI.DTO.Request;
 using AdminAPI.DTO.Response;
 using AdminAPI.Middlewares;
+using AdminAPI.Models;
 using AdminAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using static AdminAPI.Errors.Error;
@@ -40,20 +41,19 @@ namespace AdminAPI.Controllers
             }
         }
 
-        [HttpGet("category/percentage")]
-        public ActionResult<ApiResponse<List<AnalyticsCategoryPercent>, object?>> GetCategoryPercentage()
+        [HttpGet("categories")]
+        public ActionResult<ApiResponse<List<CategoryModel>, object?>> GetCategories()
         {
             try
             {
-                List<AnalyticsCategoryPercent> response = _analyticsService.GetCategoryPercentage();
+                List<CategoryModel> response = _analyticsService.GetCategories();
 
-                return Ok(new ApiResponse<List<AnalyticsCategoryPercent>, object?>(response));
+                return Ok(new ApiResponse<List<CategoryModel>, object?>(response));
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdminAPI.DTO.Response;
+using AdminAPI.Models;
 
 namespace AdminAPI.Services.Interfaces
 {
@@ -10,6 +11,6 @@ namespace AdminAPI.Services.Interfaces
     {
         public AnalyticsOverviewResponse GetOverview(DateTime startDate, DateTime endDate);
 
-        public List<AnalyticsCategoryPercent> GetCategoryPercentage();
+        public List<CategoryModel> GetCategories();
     }
 }

@@ -7,6 +7,7 @@ using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
 using static AdminAPI.Repositories.AnalyticsRepository;
 using static AdminAPI.Errors.Error;
+using AdminAPI.Models;
 
 namespace AdminAPI.Services
 {
@@ -46,11 +47,11 @@ namespace AdminAPI.Services
             }
         }
 
-        public List<AnalyticsCategoryPercent> GetCategoryPercentage()
+        public List<CategoryModel> GetCategories()
         {
             try
             {
-                return _analyticsRepository.GetCategoryPercentage();
+                return _analyticsRepository.GetCategories();
             }
             catch (Exception ex)
             {
