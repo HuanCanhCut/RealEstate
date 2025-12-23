@@ -64,5 +64,38 @@ namespace AdminAPI.Services
 
             }
         }
+
+        public CategoryModel CreateCategory(string name, string key, int userId)
+        {
+            try
+            {
+                CategoryModel? existingCategory = _categoryRepository.GetCategoryByNameAndKey(name, key);
+
+                if (existingCategory != null)
+                {
+                    throw new ConflictError("Danh mục đã tồn tại");
+                }
+
+                int insertedId = _categoryRepository.CreateCategory(name, key, userId);
+
+                if (insertedId == 0)
+                {
+                    throw new BadRequestError("Không thể tạo danh mục");
+                }
+
+                CategoryModel? category = _categoryRepository.GetCategoryById(insertedId);
+
+                return category!;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
     }
 }

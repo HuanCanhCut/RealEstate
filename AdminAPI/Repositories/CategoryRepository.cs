@@ -35,5 +35,67 @@ namespace AdminAPI.Repositories
                 throw;
             }
         }
+
+        public int CreateCategory(string name, string key, int userId)
+        {
+            try
+            {
+                // key is a reserved word in MySQL, so we need to use backticks to escape it
+                string sql = @$"
+                        INSERT INTO categories (`name`, `key`, user_id)
+                        VALUES ('{name}', '{key}', {userId});
+
+                        SELECT LAST_INSERT_ID();
+                ";
+
+                Console.WriteLine(sql);
+
+                int lastInsertId = Convert.ToInt32(_dbContext.ExecuteScalar(sql));
+
+                return lastInsertId;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public CategoryModel? GetCategoryById(int id)
+        {
+            try
+            {
+                string sql = @$"
+                    SELECT * FROM categories WHERE id = {id}
+                ";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+                return table.ConvertTo<CategoryModel>()?.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public CategoryModel? GetCategoryByNameAndKey(string name, string key)
+        {
+            try
+            {
+                string sql = @$"
+                    SELECT * FROM categories WHERE `name` = '{name}' AND `key` = '{key}'
+                ";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+                return table.ConvertTo<CategoryModel>()?.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
     }
 }

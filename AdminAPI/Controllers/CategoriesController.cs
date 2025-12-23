@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdminAPI.DTO.Request;
 using AdminAPI.DTO.Response;
 using AdminAPI.Middlewares;
 using AdminAPI.Models;
@@ -43,6 +44,26 @@ namespace AdminAPI.Controllers
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+        [VerifyToken]
+        [VerifyAdmin]
+        [HttpPost]
+        public ActionResult<ApiResponse<CategoryModel, object?>> CreateCategory(CreateCategoryRequest request)
+        {
+            try
+            {
+
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
+
+                CategoryModel category = _categoryService.CreateCategory(request.name, request.key, decoded.sub);
+
+                return CreatedAtAction(nameof(CreateCategory), new ApiResponse<CategoryModel, object?>(category));
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

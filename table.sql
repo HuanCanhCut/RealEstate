@@ -133,3 +133,9 @@ CREATE TABLE blacklisted_tokens (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+ALTER TABLE categories ADD COLUMN user_id INT NOT NULL;
+
+ALTER TABLE categories ADD FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+create index category_name_key_idx on categories (`name`, `key`);
