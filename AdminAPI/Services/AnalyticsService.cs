@@ -46,23 +46,5 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
-
-        public List<CategoryModel> GetCategories()
-        {
-            try
-            {
-                return _analyticsRepository.GetCategories();
-            }
-            catch (Exception ex)
-            {
-                if (ex is AppError)
-                {
-                    throw;
-                }
-
-                throw new InternalServerError(ex.Message + ex.StackTrace);
-
-            }
-        }
     }
 }

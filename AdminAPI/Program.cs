@@ -23,11 +23,13 @@ builder.Services.AddScoped<DbContext, DbContext>();
 
 // SERVICES
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // UTILS
 builder.Services.AddScoped<IJWT, AdminAPI.Utils.JWT>();

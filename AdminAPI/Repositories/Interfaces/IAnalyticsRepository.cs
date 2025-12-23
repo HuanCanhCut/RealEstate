@@ -11,6 +11,6 @@ namespace AdminAPI.Repositories.Interfaces
     {
         public record Overview(int total_posts, int approved_posts, int pending_posts, int users);
         public Overview GetOverview(DateTime startDate, DateTime endDate);
-        public List<CategoryModel> GetCategories();
+
     }
 }

@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AdminAPI.DTO.Response;
+using AdminAPI.Middlewares;
+using AdminAPI.Models;
+using AdminAPI.Services.Interfaces;
+using AdminAPI.Utils;
+using AdminAPI.Utils.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AdminAPI.Controllers
+{
+    [ApiController]
+    [Route("api/categories")]
+    public class CategoriesController(
+        ICategoryService categoryService,
+        IJWT jwt
+        ) : ControllerBase
+    {
+        private readonly ICategoryService _categoryService = categoryService;
+        private readonly IJWT _jwt = jwt;
+
+        [HttpGet]
+        public ActionResult<ApiResponse<List<CategoryModel>, object?>> GetCategories()
+        {
+            try
+            {
+                JwtDecoded? decoded = null;
+
+                string? token = HttpContext.Request.Cookies["access_token"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    decoded = _jwt.ValidateToken(
+                        token,
+                        Environment.GetEnvironmentVariable("JWT_SECRET_KEY")!
+                    );
+                }
+
+                List<CategoryModel> response = _categoryService.GetCategories(decoded?.sub);
+                return Ok(new ApiResponse<List<CategoryModel>, object?>(response));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+    }
+
+}

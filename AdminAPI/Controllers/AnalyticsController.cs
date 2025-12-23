@@ -40,20 +40,5 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
-
-        [HttpGet("categories")]
-        public ActionResult<ApiResponse<List<CategoryModel>, object?>> GetCategories()
-        {
-            try
-            {
-                List<CategoryModel> response = _analyticsService.GetCategories();
-
-                return Ok(new ApiResponse<List<CategoryModel>, object?>(response));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
     }
 }

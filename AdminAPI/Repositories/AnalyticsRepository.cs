@@ -54,28 +54,6 @@ namespace AdminAPI.Repositories
             }
         }
 
-        public List<CategoryModel> GetCategories()
-        {
-            try
-            {
-                string sql = @$"
-                    SELECT
-                        categories.*,
-                        COUNT(posts.id) * 100.0 / (SELECT COUNT(*) FROM posts) AS percentage
-                    FROM
-                        categories
-                    JOIN posts ON posts.category_id = categories.id
-                    GROUP BY categories.id
-                ";
 
-                DataTable table = _dbContext.ExecuteQuery(sql);
-
-                return table.ConvertTo<CategoryModel>() ?? [];
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
-        }
     }
 }
