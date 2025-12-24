@@ -24,12 +24,14 @@ builder.Services.AddScoped<DbContext, DbContext>();
 // SERVICES
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 // UTILS
 builder.Services.AddScoped<IJWT, AdminAPI.Utils.JWT>();
