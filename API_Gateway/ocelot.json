@@ -63,6 +63,18 @@
           "Port": 7124
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/manager/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "DownstreamPathTemplate": "/api/manager/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7124
+        }
+      ]
     }
   ]
 }
