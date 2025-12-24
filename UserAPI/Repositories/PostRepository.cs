@@ -98,9 +98,19 @@ namespace UserAPI.Repositories
                     SELECT
                         *,
                         JSON_OBJECT(
+                            'id', post_details.id,
                             'area', post_details.area,
                             'price', post_details.price,
-                            'post_id', post_details.post_id
+                            'post_id', post_details.post_id,
+                            'bedrooms', post_details.bedrooms,
+                            'bathrooms', post_details.bathrooms,
+                            'balcony', post_details.balcony,
+                            'main_door', post_details.main_door,
+                            'legal_documents', post_details.legal_documents,
+                            'interior_status', post_details.interior_status,
+                            'deposit', post_details.deposit,
+                            'created_at', post_details.created_at,
+                            'updated_at', post_details.updated_at
                         ) AS json_post_detail,
 
                         JSON_OBJECT(
@@ -114,6 +124,9 @@ namespace UserAPI.Repositories
                             'id', users.id,
                             'full_name', users.full_name,
                             'avatar', users.avatar,
+                            'phone_number', users.phone_number,
+                            'role', users.role,
+                            'post_count', user_post_count.post_count,
                             'nickname', users.nickname
                         ) AS json_user,
                         (
@@ -128,6 +141,12 @@ namespace UserAPI.Repositories
                     JOIN post_details ON post_details.post_id = posts.id
                     JOIN categories ON categories.id = posts.category_id
                     JOIN users ON users.id = posts.user_id
+
+                    LEFT JOIN (
+                        SELECT user_id, COUNT(*) AS post_count
+                        FROM posts
+                        GROUP BY user_id
+                    ) user_post_count ON user_post_count.user_id = users.id
 
                     WHERE posts.id = {id}
                 ";
