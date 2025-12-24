@@ -6,5 +6,7 @@ namespace AdminAPI.Services.Interfaces
     {
         public int ApprovePost(int postId);
         public PostModel GetPostById(int postId);
+
+        public int CountAll();
     }
 }

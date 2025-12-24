@@ -11,5 +11,7 @@ namespace AdminAPI.Services.Interfaces
     {
         public AnalyticsOverviewResponse GetOverview(DateTime startDate, DateTime endDate);
 
+        public List<PostLocationResponse> GetPostsLocation(DateTime startDate, DateTime endDate, int limit);
+
     }
 }

@@ -21,7 +21,7 @@ namespace AdminAPI.Controllers
         private readonly IAnalyticsService _analyticsService = analyticsService;
 
         [HttpGet("overview")]
-        public ActionResult<ApiResponse<AnalyticsOverviewResponse, object?>> GetOverview([FromQuery] OverviewRequest request)
+        public ActionResult<ApiResponse<AnalyticsOverviewResponse, object?>> GetOverview([FromQuery] RangeTimeRequest request)
         {
             try
             {
@@ -34,6 +34,26 @@ namespace AdminAPI.Controllers
                 AnalyticsOverviewResponse response = _analyticsService.GetOverview(request.start_date, request.end_date);
 
                 return Ok(new ApiResponse<AnalyticsOverviewResponse, object?>(response));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("posts/location")]
+        public ActionResult<ApiResponse<List<PostLocationResponse>, object?>> GetPostsLocation([FromQuery] GetPostLocationRequest request)
+        {
+            try
+            {
+                if (request.end_date < request.start_date)
+                {
+                    throw new BadRequestError("end date must be greater than or equal to start date");
+                }
+
+                List<PostLocationResponse> response = _analyticsService.GetPostsLocation(request.start_date, request.end_date, request.limit);
+
+                return Ok(new ApiResponse<List<PostLocationResponse>, object?>(response));
             }
             catch (Exception)
             {

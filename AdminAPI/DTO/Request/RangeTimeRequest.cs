@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdminAPI.DTO.Request
 {
-    public class OverviewRequest
+    public class RangeTimeRequest
     {
         public required DateTime start_date { get; set; }
         public required DateTime end_date { get; set; }
