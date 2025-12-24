@@ -18,5 +18,6 @@ namespace UserAPI.Services.Interfaces
         PostModel UpdatePost(int id, UpdatePostRequest request);
 
         void DeletePost(int post_id, int user_id);
+        PostModel GetPostById(int id);
     }
 }

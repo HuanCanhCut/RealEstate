@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -166,6 +166,24 @@ namespace UserAPI.Controllers
                 _postService.DeletePost(post_id, decoded.sub);
 
                 return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<ApiResponse<PostModel, object?>> GetPostById([FromRoute] int id)
+        {
+            try
+            {
+                PostModel? post = _postService.GetPostById(id);
+                if (post == null)
+                {
+                    throw new NotFoundError("Không tìm thấy bài đăng.");
+                }
+                return Ok(new ApiResponse<PostModel, object?>(post, null));
             }
             catch (Exception)
             {

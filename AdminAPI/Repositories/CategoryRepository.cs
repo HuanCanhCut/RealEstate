@@ -119,5 +119,23 @@ namespace AdminAPI.Repositories
                 throw;
             }
         }
+
+        public int DeleteCategory(int id)
+        {
+            try
+            {
+                string sql = @$"
+                    DELETE FROM categories WHERE id = {id}
+                ";
+
+                int affectedRows = _dbContext.ExecuteNonQuery(sql);
+
+                return affectedRows;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

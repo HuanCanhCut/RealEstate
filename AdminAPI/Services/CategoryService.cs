@@ -130,5 +130,35 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public void DeleteCategory(int id)
+        {
+            try
+            {
+
+                CategoryModel? category = _categoryRepository.GetCategoryById(id);
+
+                if (category == null)
+                {
+                    throw new NotFoundError("Danh mục không tồn tại");
+                }
+
+                int rowsAffected = _categoryRepository.DeleteCategory(id);
+
+                if (rowsAffected == 0)
+                {
+                    throw new InternalServerError("Không xóa được danh mục, vui lòng thử lại sau");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
     }
 }
