@@ -41,9 +41,21 @@
     },
 
     {
-      "UpstreamPathTemplate": "/api/test/{everything}",
+      "UpstreamPathTemplate": "/api/analytics/{everything}",
       "UpstreamHttpMethod": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-      "DownstreamPathTemplate": "/api/test/{everything}",
+      "DownstreamPathTemplate": "/api/analytics/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7124
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/categories/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "DownstreamPathTemplate": "/api/categories/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
