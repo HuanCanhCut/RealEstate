@@ -94,8 +94,30 @@ namespace AdminAPI.Repositories
             {
                 throw;
             }
+        }
 
+        public int UpdateCategory(int id, string name, string key, int userId)
+        {
+            try
+            {
+                string sql = @$"
+                    UPDATE 
+                        categories 
+                    SET 
+                        `name` = '{name}', 
+                        `key` = '{key}', 
+                        `user_id` = {userId} 
+                    WHERE id = {id};
+                ";
 
+                int affectedRows = _dbContext.ExecuteNonQuery(sql);
+
+                return affectedRows;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -67,6 +67,24 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
-    }
 
+        [VerifyToken]
+        [VerifyAdmin]
+        [HttpPut("{id}")]
+        public ActionResult<ApiResponse<CategoryModel, object?>> UpdateCategory(int id, UpdateCategoryRequest request)
+        {
+            try
+            {
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
+
+                CategoryModel? category = _categoryService.UpdateCategory(id, request.name, request.key, decoded.sub);
+
+                return Ok(new ApiResponse<CategoryModel, object?>(category));
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+    }
 }

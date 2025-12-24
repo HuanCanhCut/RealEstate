@@ -97,5 +97,38 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public CategoryModel? UpdateCategory(int id, string name, string key, int userId)
+        {
+            try
+            {
+                CategoryModel? existingCategory = _categoryRepository.GetCategoryById(id);
+
+                if (existingCategory == null)
+                {
+                    throw new NotFoundError("Danh mục không tồn tại");
+                }
+
+                int rowsAffected = _categoryRepository.UpdateCategory(id, name, key, userId);
+
+                if (rowsAffected == 0)
+                {
+                    throw new BadRequestError("Không thể cập nhật danh mục");
+                }
+
+                CategoryModel? category = _categoryRepository.GetCategoryById(id);
+
+                return category;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace AdminAPI.Services.Interfaces
     {
         public List<CategoryModel> GetCategories(int? currentUserId);
         public CategoryModel CreateCategory(string name, string key, int userId);
+        public CategoryModel? UpdateCategory(int id, string name, string key, int userId);
     }
 }
