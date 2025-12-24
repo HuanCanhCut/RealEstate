@@ -13,5 +13,6 @@ namespace AdminAPI.Repositories.Interfaces
         public CategoryModel? GetCategoryById(int id);
         public CategoryModel? GetCategoryByNameAndKey(string name, string key);
         public int UpdateCategory(int id, string name, string key, int userId);
+        public int DeleteCategory(int id);
     }
 }
