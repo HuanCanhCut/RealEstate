@@ -59,7 +59,7 @@ namespace AdminAPI.Controllers
 
                 JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
-                CategoryModel category = _categoryService.CreateCategory(request.name, request.key, decoded.sub);
+                CategoryModel category = _categoryService.CreateCategory(request.name, request.key);
 
                 return CreatedAtAction(nameof(CreateCategory), new ApiResponse<CategoryModel, object?>(category));
             }
@@ -77,7 +77,7 @@ namespace AdminAPI.Controllers
             {
                 JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
-                CategoryModel? category = _categoryService.UpdateCategory(id, request.name, request.key, decoded.sub);
+                CategoryModel category = _categoryService.UpdateCategory(id, request.name, request.key);
 
                 return Ok(new ApiResponse<CategoryModel, object?>(category));
             }

@@ -60,5 +60,20 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+
+        [HttpDelete("users/{id}")]
+        public IActionResult DeleteUser([FromRoute] int id)
+        {
+            try
+            {
+                _analyticsService.DeleteUser(id);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

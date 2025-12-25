@@ -6,5 +6,6 @@ namespace AdminAPI.Repositories.Interfaces
     public interface IUserRepository
     {
         UserModel? GetUserById(int id);
+        bool DeleteUser(int id);
     }
 }

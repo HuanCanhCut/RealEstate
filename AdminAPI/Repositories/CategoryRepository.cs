@@ -36,14 +36,14 @@ namespace AdminAPI.Repositories
             }
         }
 
-        public int CreateCategory(string name, string key, int userId)
+        public int CreateCategory(string name, string key)
         {
             try
             {
                 // key is a reserved word in MySQL, so we need to use backticks to escape it
                 string sql = @$"
-                        INSERT INTO categories (`name`, `key`, user_id)
-                        VALUES ('{name}', '{key}', {userId});
+                        INSERT INTO categories (`name`, `key`)
+                        VALUES ('{name}', '{key}');
 
                         SELECT LAST_INSERT_ID();
                 ";
@@ -96,7 +96,7 @@ namespace AdminAPI.Repositories
             }
         }
 
-        public int UpdateCategory(int id, string name, string key, int userId)
+        public int UpdateCategory(int id, string name, string key)
         {
             try
             {
@@ -105,8 +105,7 @@ namespace AdminAPI.Repositories
                         categories 
                     SET 
                         `name` = '{name}', 
-                        `key` = '{key}', 
-                        `user_id` = {userId} 
+                        `key` = '{key}'
                     WHERE id = {id};
                 ";
 

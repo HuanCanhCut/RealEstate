@@ -11,10 +11,11 @@ using AdminAPI.Models;
 
 namespace AdminAPI.Services
 {
-    public class AnalyticsService(IAnalyticsRepository analyticsRepository, IPostService postService) : IAnalyticsService
+    public class AnalyticsService(IAnalyticsRepository analyticsRepository, IPostService postService, IUserRepository userRepository) : IAnalyticsService
     {
         private readonly IAnalyticsRepository _analyticsRepository = analyticsRepository;
         private readonly IPostService _postService = postService;
+        private readonly IUserRepository _userRepository = userRepository;
 
         public AnalyticsOverviewResponse GetOverview(DateTime startDate, DateTime endDate)
         {
@@ -83,6 +84,18 @@ namespace AdminAPI.Services
                 })?.ToList();
 
                 return response ?? [];
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public bool DeleteUser(int id)
+        {
+            try
+            {
+                return _userRepository.DeleteUser(id);
             }
             catch (Exception ex)
             {

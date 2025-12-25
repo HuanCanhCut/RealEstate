@@ -13,5 +13,7 @@ namespace AdminAPI.Services.Interfaces
 
         public List<PostLocationResponse> GetPostsLocation(DateTime startDate, DateTime endDate, int limit);
 
+        public bool DeleteUser(int id);
+
     }
 }
