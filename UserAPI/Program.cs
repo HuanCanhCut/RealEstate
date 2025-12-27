@@ -3,8 +3,8 @@ using System.Xml;
 using UserAPI.Middlewares;
 using UserAPI.Repositories;
 using UserAPI.Repositories.Interfaces;
-using UserAPI.Respositories;
-using UserAPI.Respositories.Interfaces;
+using UserAPI.Repositories;
+using UserAPI.Repositories.Interfaces;
 using UserAPI.Services;
 using UserAPI.Services.Interfaces;
 using UserAPI.Utils;
@@ -21,11 +21,12 @@ builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<DbContext>(provider => new DbContext());
+builder.Services.AddScoped<DbContext, DbContext>();
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // SERVICES
 builder.Services.AddScoped<IAuthService, AuthService>();

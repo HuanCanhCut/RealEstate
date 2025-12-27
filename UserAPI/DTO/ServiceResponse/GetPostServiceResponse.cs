@@ -8,7 +8,7 @@ namespace UserAPI.DTO.ServiceResponse
 {
     public class GetPostServiceResponse
     {
-        public required IList<PostModel> data { get; set; }
+        public required List<PostModel> data { get; set; }
 
         public required int total { get; set; }
         public required int count { get; set; }

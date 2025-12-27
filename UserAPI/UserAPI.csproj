@@ -23,7 +23,7 @@
     <Folder Include="Middlewares\" />
     <Folder Include="Models\Enums\" />
     <Folder Include="Models\Interfaces\" />
-    <Folder Include="Respositories\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

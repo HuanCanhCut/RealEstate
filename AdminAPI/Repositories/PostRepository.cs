@@ -1,0 +1,51 @@
+﻿using AdminAPI.Models;
+using AdminAPI.Repositories.Interfaces;
+using AdminAPI.Services.Interfaces;
+
+namespace AdminAPI.Repositories
+{
+    public class PostRepository : IPostRepository
+    {
+        private DbContext _dbContext;
+
+        public PostRepository(DbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public int ApprovePost(int postId)
+        {
+            try
+            {
+                string sql = $"UPDATE posts SET post_status = 'approved' WHERE id = {postId}";
+                return _dbContext.ExecuteNonQuery(sql);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public PostModel GetPostById(int postId)
+        {
+            try
+            {
+                string sql = $"SELECT * FROM posts WHERE id = {postId}";
+
+                return _dbContext.ExecuteQuery(sql).ConvertTo<PostModel>()?.FirstOrDefault()!;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                string sql = $"SELECT COUNT(id) FROM posts";
+
+                return Convert.ToInt32(_dbContext.ExecuteScalar(sql) ?? 0);
+            }
+            catch (Exception) { throw; }
+        }
+    }
+}
