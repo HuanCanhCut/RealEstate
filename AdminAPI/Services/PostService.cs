@@ -6,7 +6,7 @@ using static AdminAPI.Errors.Error;
 
 namespace AdminAPI.Services
 {
-    public class PostService: IPostService
+    public class PostService : IPostService
     {
         private readonly IPostRepository _postRepository;
 
@@ -27,7 +27,7 @@ namespace AdminAPI.Services
                 }
 
                 return post;
-                }
+            }
             catch (Exception ex)
             {
                 if (ex is AppError) { throw; }
@@ -48,7 +48,7 @@ namespace AdminAPI.Services
                 }
 
                 int rowAffected = _postRepository.ApprovePost(postId);
-                if(rowAffected == 0)
+                if (rowAffected == 0)
                 {
                     throw new InternalServerError("Phê duyệt bài đăng thất bại.");
                 }
@@ -56,7 +56,21 @@ namespace AdminAPI.Services
             }
             catch (Exception ex)
             {
-                if(ex is AppError) { throw; }
+                if (ex is AppError) { throw; }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                return _postRepository.CountAll();
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) { throw; }
 
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }

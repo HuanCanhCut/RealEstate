@@ -6,5 +6,6 @@ namespace AdminAPI.Repositories.Interfaces
     {
         public PostModel GetPostById(int postId);
         public int ApprovePost(int postId);
+        public int CountAll();
     }
 }

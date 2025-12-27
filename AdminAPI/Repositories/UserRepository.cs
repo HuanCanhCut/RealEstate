@@ -20,5 +20,21 @@ namespace AdminAPI.Repositories
                 throw;
             }
         }
+
+        public bool DeleteUser(int id)
+        {
+            try
+            {
+                string query = $"UPDATE users SET is_deleted = TRUE WHERE id = {id}";
+
+                return _dbContext.ExecuteNonQuery(query) > 0;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

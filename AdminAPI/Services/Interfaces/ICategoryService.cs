@@ -9,8 +9,8 @@ namespace AdminAPI.Services.Interfaces
     public interface ICategoryService
     {
         public List<CategoryModel> GetCategories(int? currentUserId);
-        public CategoryModel CreateCategory(string name, string key, int userId);
-        public CategoryModel? UpdateCategory(int id, string name, string key, int userId);
+        public CategoryModel CreateCategory(string name, string key);
+        public CategoryModel UpdateCategory(int id, string name, string key);
         public void DeleteCategory(int id);
     }
 }
