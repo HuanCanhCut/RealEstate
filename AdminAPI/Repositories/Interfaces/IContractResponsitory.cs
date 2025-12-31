@@ -9,5 +9,8 @@ namespace AdminAPI.Repositories.Interfaces
 
         ContractModel GetContractById(int id);
 
+        bool UpdateStatus(int contractId, string status);
+
+
     }
 }

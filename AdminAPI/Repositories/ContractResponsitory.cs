@@ -137,5 +137,27 @@ namespace AdminAPI.Repositories
             }
         }
 
+        public bool UpdateStatus(int contractId, string status)
+        {
+            try
+            {
+                string sql = $@"
+            UPDATE contracts
+            SET status = '{status}',
+                updated_at = NOW()
+            WHERE id = {contractId}
+              AND is_deleted = 0
+              AND deleted_at IS NULL;
+        ";
+
+                int rows = _dbContext.ExecuteNonQuery(sql);
+
+                return rows > 0;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

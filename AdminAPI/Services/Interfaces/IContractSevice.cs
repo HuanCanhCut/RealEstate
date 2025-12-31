@@ -7,5 +7,8 @@ namespace AdminAPI.Services.Interfaces
     {
         ContractModel GetContractById(int id);
         public ServiceResponsePagination<ContractModel> GetContracts(int page, int perPage);
+
+        bool UpdateStatus(int contractId, string status);
+
     }
 }

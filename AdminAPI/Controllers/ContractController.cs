@@ -61,5 +61,27 @@ namespace AdminAPI.Controllers
             }
         }
 
+        [HttpPatch("{id}/status")]
+        public ActionResult<ApiResponse<object, object>> UpdateStatus(
+    int id,
+    [FromBody] UpdateContractStatusRequest request
+)
+        {
+            try
+            {
+                _contractService.UpdateStatus(id, request.status);
+
+                return Ok(new ApiResponse<object, object>(
+                    data: new { message = "Cập nhật trạng thái hợp đồng thành công" },
+                    meta: null
+                ));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

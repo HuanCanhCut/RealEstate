@@ -59,5 +59,46 @@ namespace AdminAPI.Services
             }
         }
 
+        public bool UpdateStatus(int contractId, string status)
+        {
+            try
+            {
+                // 1️⃣ Check contract tồn tại
+                ContractModel contract = _contractRepository.GetContractById(contractId);
+
+                if (contract == null)
+                {
+                    throw new NotFoundError("Không tìm thấy hợp đồng");
+                }
+
+                // 2️⃣ Validate status
+                List<string> allowStatus = new()
+        {
+            "approved",
+            "rejected"
+        };
+
+                if (!allowStatus.Contains(status))
+                {
+                    throw new BadRequestError("Trạng thái hợp đồng không hợp lệ");
+                }
+
+                // 3️⃣ Update
+                bool result = _contractRepository.UpdateStatus(contractId, status);
+
+                if (!result)
+                {
+                    throw new InternalServerError("Cập nhật trạng thái thất bại");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) throw;
+                throw new InternalServerError(ex.Message);
+            }
+        }
+
     }
 }
