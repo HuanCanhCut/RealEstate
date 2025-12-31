@@ -25,6 +25,7 @@ builder.Services.AddScoped<DbContext, DbContext>();
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IContractSevice, ContractService>();
 
 // REPOSITORIES
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -32,6 +33,7 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IContractResponsitory, ContractResponsitory>();
 
 // UTILS
 builder.Services.AddScoped<IJWT, AdminAPI.Utils.JWT>();
