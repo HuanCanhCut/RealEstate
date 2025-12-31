@@ -74,7 +74,7 @@ namespace AdminAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/admin")]
         public ActionResult DeletePost(int id)
         {
             try
