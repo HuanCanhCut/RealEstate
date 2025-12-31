@@ -6,5 +6,8 @@ namespace AdminAPI.Repositories.Interfaces
     {
         public int CountAll();
         public List<ContractModel> GetContracts(int page, int perPage);
+
+        ContractModel GetContractById(int id);
+
     }
 }

@@ -81,5 +81,61 @@ namespace AdminAPI.Repositories
                 throw;
             }
         }
+
+
+        public ContractModel GetContractById(int id)
+        {
+            try
+            {
+                string sql = $@"
+                    SELECT 
+                        c.id,
+                        c.amount,
+                        c.commission,
+                        c.status,
+                        c.duration,
+                        c.clause,
+                        c.created_at,
+
+                        JSON_OBJECT(
+                            'id', cu.id,
+                            'full_name', cu.full_name,
+                            'phone_number', cu.phone_number
+                        ) AS json_customer,
+
+                        JSON_OBJECT(
+                            'id', ag.id,
+                            'full_name', ag.full_name,
+                            'phone_number', ag.phone_number
+                        ) AS json_agent,
+
+                        JSON_OBJECT(
+                            'id', p.id,
+                            'title', p.title
+                        ) AS json_post
+
+                    FROM contracts c
+                    JOIN users cu ON cu.id = c.customer_id
+                    JOIN users ag ON ag.id = c.agent_id
+                    JOIN posts p ON p.id = c.post_id
+
+                    WHERE c.id = {id}
+                    AND c.is_deleted = 0
+                    AND c.deleted_at IS NULL
+                    LIMIT 1;
+                    ";
+
+
+                return _dbContext
+                    .ExecuteQuery(sql)
+                    .ConvertTo<ContractModel>()
+                    .FirstOrDefault();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

@@ -42,5 +42,24 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<ApiResponse<ContractModel, object>> GetContractDetail(int id)
+        {
+            try
+            {
+                ContractModel contract = _contractService.GetContractById(id);
+
+                return Ok(new ApiResponse<ContractModel, object>(
+                    data: contract,
+                    meta: null
+                ));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

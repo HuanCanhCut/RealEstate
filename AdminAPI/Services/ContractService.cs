@@ -37,5 +37,27 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public ContractModel GetContractById(int id)
+        {
+            try
+            {
+                ContractModel contract = _contractRepository.GetContractById(id);
+
+                if (contract == null)
+                {
+                    throw new NotFoundError("Không tìm thấy hợp đồng");
+                }
+
+                return contract;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) throw;
+
+                throw new InternalServerError(ex.Message);
+            }
+        }
+
     }
 }
