@@ -100,5 +100,23 @@ namespace AdminAPI.Services
             }
         }
 
+        public bool DeleteContract(int id)
+        {
+            try
+            {
+                bool result = _contractRepository.DeleteContract(id);
+
+                if (!result)
+                    throw new NotFoundError("Hợp đồng không tồn tại hoặc đã bị xoá");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) throw;
+                throw new InternalServerError(ex.Message);
+            }
+        }
+
     }
 }

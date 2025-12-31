@@ -82,6 +82,23 @@ namespace AdminAPI.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult<ApiResponse<object, object>> DeleteContract(int id)
+        {
+            try
+            {
+                _contractService.DeleteContract(id);
+
+                return Ok(new ApiResponse<object, object>(
+                    data: new { message = "Xoá hợp đồng thành công" },
+                    meta: null
+                ));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
     }
 }

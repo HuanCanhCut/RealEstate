@@ -159,5 +159,28 @@ namespace AdminAPI.Repositories
                 throw;
             }
         }
+
+        public bool DeleteContract(int id)
+        {
+            try
+            {
+                string sql = $@"
+            UPDATE contracts
+            SET 
+                is_deleted = 1,
+                deleted_at = NOW()
+            WHERE id = {id}
+            AND is_deleted = 0
+            AND deleted_at IS NULL;
+        ";
+
+                int rows = _dbContext.ExecuteNonQuery(sql);
+                return rows > 0;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

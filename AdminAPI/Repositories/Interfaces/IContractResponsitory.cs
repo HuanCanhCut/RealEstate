@@ -11,6 +11,7 @@ namespace AdminAPI.Repositories.Interfaces
 
         bool UpdateStatus(int contractId, string status);
 
+        bool DeleteContract(int id);
 
     }
 }

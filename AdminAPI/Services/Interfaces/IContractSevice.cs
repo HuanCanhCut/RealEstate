@@ -10,5 +10,7 @@ namespace AdminAPI.Services.Interfaces
 
         bool UpdateStatus(int contractId, string status);
 
+        bool DeleteContract(int id);
+
     }
 }
