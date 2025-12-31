@@ -65,7 +65,7 @@ namespace AdminAPI.Services
             }
         }
 
-        public CategoryModel CreateCategory(string name, string key, int userId)
+        public CategoryModel CreateCategory(string name, string key)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace AdminAPI.Services
                     throw new ConflictError("Danh mục đã tồn tại");
                 }
 
-                int insertedId = _categoryRepository.CreateCategory(name, key, userId);
+                int insertedId = _categoryRepository.CreateCategory(name, key);
 
                 if (insertedId == 0)
                 {
@@ -98,7 +98,7 @@ namespace AdminAPI.Services
             }
         }
 
-        public CategoryModel? UpdateCategory(int id, string name, string key, int userId)
+        public CategoryModel? UpdateCategory(int id, string name, string key)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace AdminAPI.Services
                     throw new NotFoundError("Danh mục không tồn tại");
                 }
 
-                int rowsAffected = _categoryRepository.UpdateCategory(id, name, key, userId);
+                int rowsAffected = _categoryRepository.UpdateCategory(id, name, key);
 
                 if (rowsAffected == 0)
                 {
@@ -119,6 +119,36 @@ namespace AdminAPI.Services
                 CategoryModel? category = _categoryRepository.GetCategoryById(id);
 
                 return category;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public void DeleteCategory(int id)
+        {
+            try
+            {
+
+                CategoryModel? category = _categoryRepository.GetCategoryById(id);
+
+                if (category == null)
+                {
+                    throw new NotFoundError("Danh mục không tồn tại");
+                }
+
+                int rowsAffected = _categoryRepository.DeleteCategory(id);
+
+                if (rowsAffected == 0)
+                {
+                    throw new InternalServerError("Không xóa được danh mục, vui lòng thử lại sau");
+                }
             }
             catch (Exception ex)
             {

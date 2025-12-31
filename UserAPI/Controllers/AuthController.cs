@@ -31,7 +31,7 @@ namespace UserAPI.Controllers
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
                         MaxAge = TimeSpan.FromMinutes(50026068),
                         Path = "/",
                     });
@@ -42,7 +42,7 @@ namespace UserAPI.Controllers
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
                         MaxAge = TimeSpan.FromMinutes(50026068),
                         Path = "/"
                     });
@@ -69,7 +69,7 @@ namespace UserAPI.Controllers
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
                         MaxAge = TimeSpan.FromMinutes(50026068),
                         Path = "/",
                     });
@@ -80,7 +80,7 @@ namespace UserAPI.Controllers
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
                         MaxAge = TimeSpan.FromMinutes(50026068),
                         Path = "/"
                     });
@@ -149,7 +149,7 @@ namespace UserAPI.Controllers
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
                         MaxAge = TimeSpan.FromMinutes(50026068),
                         Path = "/",
                     });
@@ -160,7 +160,7 @@ namespace UserAPI.Controllers
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = SameSiteMode.None,
                         MaxAge = TimeSpan.FromMinutes(50026068),
                         Path = "/"
                     });

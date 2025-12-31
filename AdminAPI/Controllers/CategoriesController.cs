@@ -9,20 +9,24 @@ using AdminAPI.Models;
 using AdminAPI.Services.Interfaces;
 using AdminAPI.Utils;
 using AdminAPI.Utils.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminAPI.Controllers
 {
+    [VerifyToken]
+    [VerifyAdmin]
     [ApiController]
     [Route("api/categories")]
     public class CategoriesController(
-        ICategoryService categoryService,
-        IJWT jwt
-        ) : ControllerBase
+       ICategoryService categoryService,
+       IJWT jwt
+       ) : ControllerBase
     {
         private readonly ICategoryService _categoryService = categoryService;
         private readonly IJWT _jwt = jwt;
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<ApiResponse<List<CategoryModel>, object?>> GetCategories()
         {
@@ -47,8 +51,6 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
-        [VerifyToken]
-        [VerifyAdmin]
         [HttpPost]
         public ActionResult<ApiResponse<CategoryModel, object?>> CreateCategory(CreateCategoryRequest request)
         {
@@ -57,7 +59,7 @@ namespace AdminAPI.Controllers
 
                 JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
-                CategoryModel category = _categoryService.CreateCategory(request.name, request.key, decoded.sub);
+                CategoryModel category = _categoryService.CreateCategory(request.name, request.key);
 
                 return CreatedAtAction(nameof(CreateCategory), new ApiResponse<CategoryModel, object?>(category));
             }
@@ -68,8 +70,6 @@ namespace AdminAPI.Controllers
             }
         }
 
-        [VerifyToken]
-        [VerifyAdmin]
         [HttpPut("{id}")]
         public ActionResult<ApiResponse<CategoryModel, object?>> UpdateCategory(int id, UpdateCategoryRequest request)
         {
@@ -77,11 +77,26 @@ namespace AdminAPI.Controllers
             {
                 JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
-                CategoryModel? category = _categoryService.UpdateCategory(id, request.name, request.key, decoded.sub);
+                CategoryModel category = _categoryService.UpdateCategory(id, request.name, request.key);
 
                 return Ok(new ApiResponse<CategoryModel, object?>(category));
             }
             catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<ApiResponse<object, object?>> DeleteCategory(int id)
+        {
+            try
+            {
+                _categoryService.DeleteCategory(id);
+
+                return NoContent();
+            }
+            catch (Exception)
             {
                 throw;
             }

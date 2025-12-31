@@ -1,10 +1,11 @@
 ﻿using AdminAPI.Models;
+using AdminAPI.Models.Enums;
 using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
 
 namespace AdminAPI.Repositories
 {
-    public class PostRepository: IPostRepository
+    public class PostRepository : IPostRepository
     {
         private DbContext _dbContext;
 
@@ -13,18 +14,18 @@ namespace AdminAPI.Repositories
             _dbContext = dbContext;
         }
 
-        public int ApprovePost(int postId)
+        public int UpdatePostStatus(int postId, PostEnum type)
         {
             try
             {
-                string sql = $"UPDATE posts SET post_status = 'approved' WHERE id = {postId}";
+                string sql = $"UPDATE posts SET post_status = '{type}' WHERE id = {postId}";
                 return _dbContext.ExecuteNonQuery(sql);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
-            }
+        }
 
         public PostModel GetPostById(int postId)
         {
@@ -34,7 +35,18 @@ namespace AdminAPI.Repositories
 
                 return _dbContext.ExecuteQuery(sql).ConvertTo<PostModel>()?.FirstOrDefault()!;
             }
-            catch(Exception) { throw;  }
+            catch (Exception) { throw; }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                string sql = $"SELECT COUNT(id) FROM posts";
+
+                return Convert.ToInt32(_dbContext.ExecuteScalar(sql) ?? 0);
+            }
+            catch (Exception) { throw; }
         }
     }
 }
