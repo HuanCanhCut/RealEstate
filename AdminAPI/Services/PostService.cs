@@ -6,7 +6,7 @@ using static AdminAPI.Errors.Error;
 
 namespace AdminAPI.Services
 {
-    public class PostService: IPostService
+    public class PostService : IPostService
     {
         private readonly IPostRepository _postRepository;
 
@@ -27,7 +27,7 @@ namespace AdminAPI.Services
                 }
 
                 return post;
-                }
+            }
             catch (Exception ex)
             {
                 if (ex is AppError) { throw; }
@@ -47,7 +47,8 @@ namespace AdminAPI.Services
                 //    throw new BadRequestError("Bài đăng đã được phê duyệt trước đó.");
                 //}
 
-                switch(type){
+                switch (type)
+                {
                     case PostEnum.approved:
                         if (post.post_status == PostEnum.approved)
                         {
@@ -71,7 +72,7 @@ namespace AdminAPI.Services
                 }
 
                 int rowAffected = _postRepository.UpdatePostStatus(postId, type);
-                if(rowAffected == 0)
+                if (rowAffected == 0)
                 {
                     throw new InternalServerError("Cập nhật bài đăng thất bại.");
                 }
@@ -79,7 +80,21 @@ namespace AdminAPI.Services
             }
             catch (Exception ex)
             {
-                if(ex is AppError) { throw; }
+                if (ex is AppError) { throw; }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                return _postRepository.CountAll();
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) { throw; }
 
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }

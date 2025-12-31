@@ -77,8 +77,6 @@ namespace AdminAPI.Repositories
 
         public object ExecuteScalar(string query)
         {
-            object? result = null;
-
             try
             {
                 using MySqlConnection connection = new(connectionString);
@@ -87,8 +85,7 @@ namespace AdminAPI.Repositories
 
                     MySqlCommand command = new(query, connection);
 
-                    result = command.ExecuteScalar();
-
+                    object? result = command.ExecuteScalar();
                     connection.Close();
 
                     return result;

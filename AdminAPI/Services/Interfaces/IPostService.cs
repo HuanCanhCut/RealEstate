@@ -7,5 +7,7 @@ namespace AdminAPI.Services.Interfaces
     {
         public int UpdatePostStatus(int postId, PostEnum status);
         public PostModel GetPostById(int postId);
+
+        public int CountAll();
     }
 }

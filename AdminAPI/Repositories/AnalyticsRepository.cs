@@ -54,6 +54,52 @@ namespace AdminAPI.Repositories
             }
         }
 
+        public List<IAnalyticsRepository.PostLocation> GetPostsLocation(DateTime startDate, DateTime endDate, int limit, List<string>? locations = null)
+        {
+            try
+            {
+                string whereClause = "";
 
+                if (locations != null && locations.Any())
+                {
+                    whereClause = $"AND posts.administrative_address IN ({string.Join(",", locations.Select(x => $"'{x}'"))})";
+                }
+
+                string sql = $@"
+                    SELECT
+                        posts.administrative_address,
+                        COUNT(id) AS total_post
+                    FROM posts
+                    WHERE created_at >= '{startDate:yyyy-MM-dd}'
+                        AND created_at <  '{endDate:yyyy-MM-dd}'
+                    {whereClause}
+                    GROUP BY posts.administrative_address
+                    ORDER BY total_post DESC
+                    LIMIT {limit};
+                ";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+                List<IAnalyticsRepository.PostLocation> postLocations = [];
+
+                foreach (DataRow row in table.Rows)
+                {
+                    // Skip if address is null or empty
+                    string? address = Convert.ToString(row["administrative_address"]);
+                    if (address == null || address == "") { continue; }
+
+                    postLocations.Add(new IAnalyticsRepository.PostLocation(
+                        address,
+                        Convert.ToInt32(row["total_post"])
+                    ));
+                }
+
+                return postLocations;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
     }
 }
