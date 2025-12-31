@@ -48,5 +48,19 @@ namespace AdminAPI.Repositories
             }
             catch (Exception) { throw; }
         }
+
+
+        public int DeletePost(int postId)
+        {
+            try
+            {
+                string sql = $"UPDATE posts SET is_deleted = 1, deleted_at = CURRENT_TIME WHERE id = {postId}";
+                return _dbContext.ExecuteNonQuery(sql);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -73,5 +73,19 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeletePost(int id)
+        {
+            try
+            {
+                _postService.DeletePost(id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

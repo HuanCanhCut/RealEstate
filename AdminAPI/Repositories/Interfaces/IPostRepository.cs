@@ -9,5 +9,7 @@ namespace AdminAPI.Repositories.Interfaces
                 public int UpdatePostStatus(int postId, PostEnum type);
 
                 public int CountAll();
-        }
+
+                public int DeletePost(int postId);
+    }
 }
