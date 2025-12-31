@@ -14,22 +14,46 @@ namespace AdminAPI.Repositories
 
         public List<ContractModel> GetContracts(int page, int perPage)
         {
+            return NewMethod(page, perPage);
+        }
+
+        private List<ContractModel> NewMethod(int page, int perPage)
+        {
             try
             {
-                // Chuẩn hoá page/perPage để tránh âm/0
-                if (page <= 0) page = 1;
-                if (perPage <= 0) perPage = 10;
-                if (perPage > 100) perPage = 100; // chặn perPage quá lớn
-
                 int offset = (page - 1) * perPage;
 
                 string sql = $@"
-                    SELECT *
-                    FROM contracts
-                    WHERE is_deleted = 0 AND deleted_at IS NULL
-                    ORDER BY created_at DESC
-                    LIMIT {perPage} OFFSET {offset};
-                ";
+                    SELECT 
+                        c.id,
+                        c.amount,
+                        c.commission,
+                        c.status,
+                        c.created_at,
+
+                        JSON_OBJECT(
+                            'full_name', cu.full_name
+                        ) AS json_customer,
+
+                        JSON_OBJECT(
+                            'full_name', ag.full_name
+                        ) AS json_agent,
+
+                        JSON_OBJECT(
+                            'title', p.title
+                        ) AS json_post
+
+                    FROM contracts c
+                    JOIN users cu ON cu.id = c.customer_id
+                    JOIN users ag ON ag.id = c.agent_id
+                    JOIN posts p ON p.id = c.post_id
+
+                    WHERE c.is_deleted = 0
+                    AND c.deleted_at IS NULL
+
+                    LIMIT {perPage}
+                    OFFSET {offset};
+                    ";
 
                 return _dbContext.ExecuteQuery(sql).ConvertTo<ContractModel>() ?? [];
             }
