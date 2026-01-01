@@ -1,4 +1,5 @@
 ﻿using AdminAPI.Models;
+using AdminAPI.Models.Enums;
 using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
 
@@ -13,11 +14,11 @@ namespace AdminAPI.Repositories
             _dbContext = dbContext;
         }
 
-        public int ApprovePost(int postId)
+        public int UpdatePostStatus(int postId, PostEnum type)
         {
             try
             {
-                string sql = $"UPDATE posts SET post_status = 'approved' WHERE id = {postId}";
+                string sql = $"UPDATE posts SET post_status = '{type}' WHERE id = {postId}";
                 return _dbContext.ExecuteNonQuery(sql);
             }
             catch (Exception)
