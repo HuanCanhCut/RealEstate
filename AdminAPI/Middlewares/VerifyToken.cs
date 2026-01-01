@@ -62,8 +62,8 @@ namespace AdminAPI.Middlewares
             {
 
                 // clear cookies from client
-                context.HttpContext.Response.Cookies.Delete("access_token");
-                context.HttpContext.Response.Cookies.Delete("refresh_token");
+                context.HttpContext.Response.Cookies.Delete("access_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true});
+                context.HttpContext.Response.Cookies.Delete("refresh_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true});
 
                 // if token is expired, set header x-refresh-token-required
                 if (ex is TokenExpiredException)
