@@ -1,10 +1,10 @@
+using AdminAPI.Models;
+using AdminAPI.Repositories;
+using AdminAPI.Utils;
+using AdminAPI.Utils.Interfaces;
 using JWT.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using AdminAPI.Models;
-using AdminAPI.Utils;
-using AdminAPI.Utils.Interfaces;
-using AdminAPI.Repositories;
 
 namespace AdminAPI.Middlewares
 {
@@ -60,15 +60,16 @@ namespace AdminAPI.Middlewares
             }
             catch (Exception ex)
             {
-
-                // clear cookies from client
-                context.HttpContext.Response.Cookies.Delete("access_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true});
-                context.HttpContext.Response.Cookies.Delete("refresh_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true});
-
                 // if token is expired, set header x-refresh-token-required
                 if (ex is TokenExpiredException)
                 {
                     context.HttpContext.Response.Headers.Append("x-refresh-token-required", "true");
+                }
+                else
+                {
+                    // clear cookies from client (only delete token when error is not token expired)
+                    context.HttpContext.Response.Cookies.Delete("access_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true });
+                    context.HttpContext.Response.Cookies.Delete("refresh_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true });
                 }
 
                 context.Result = new JsonResult(new
