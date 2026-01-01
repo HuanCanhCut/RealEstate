@@ -12,7 +12,7 @@ namespace UserAPI.Repositories.Interfaces
     {
         int CreatePost(CreatePostRequest post);
         PostModel GetPostById(int id);
-        List<PostModel> GetPosts(GetPostRequest request);
+        List<PostModel> GetPosts(GetPostRequest request, int currentUserId);
         int CountAll();
         List<PostModel> SearchPosts(string q);
         int LikePost(int post_id, int user_id);

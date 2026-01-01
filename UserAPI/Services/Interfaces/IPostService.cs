@@ -11,7 +11,7 @@ namespace UserAPI.Services.Interfaces
     public interface IPostService
     {
         PostModel CreatePost(CreatePostRequest post);
-        GetPostServiceResponse GetPosts(GetPostRequest request);
+        GetPostServiceResponse GetPosts(GetPostRequest request, int currentUserId);
         List<PostModel> SearchPosts(string q);
         PostModel LikePost(int post_id, int user_id);
         void UnlikePost(int post_id, int user_id);

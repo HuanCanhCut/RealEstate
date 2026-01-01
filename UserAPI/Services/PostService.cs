@@ -59,11 +59,11 @@ namespace UserAPI.Services
             }
         }
 
-        public GetPostServiceResponse GetPosts(GetPostRequest request)
+        public GetPostServiceResponse GetPosts(GetPostRequest request, int currentUserId)
         {
             try
             {
-                List<PostModel>? result = _postRepository.GetPosts(request);
+                List<PostModel>? result = _postRepository.GetPosts(request, currentUserId);
                 int total = _postRepository.CountAll();
 
                 return new GetPostServiceResponse

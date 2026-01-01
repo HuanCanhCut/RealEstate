@@ -12,15 +12,17 @@ using UserAPI.Middlewares;
 using UserAPI.Models;
 using UserAPI.Services.Interfaces;
 using UserAPI.Utils;
+using UserAPI.Utils.Interfaces;
 using static UserAPI.Errors.Error;
 
 namespace UserAPI.Controllers
 {
     [ApiController]
     [Route("api/posts")]
-    public class PostController(IPostService postService) : ControllerBase
+    public class PostController(IPostService postService, IJWT jwt) : ControllerBase
     {
         private readonly IPostService _postService = postService;
+        private readonly IJWT _jwt = jwt;
 
         [VerifyToken]
         [HttpPost]
@@ -45,7 +47,26 @@ namespace UserAPI.Controllers
         {
             try
             {
-                GetPostServiceResponse posts = _postService.GetPosts(postRequest);
+                int currentUserId = 0;
+
+                try
+                {
+                    string accessToken = Request.Cookies["access_token"] ?? "";
+
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        throw new Exception();
+                    }
+
+                    JwtDecoded decoded = _jwt.ValidateToken(accessToken, Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "");
+                    currentUserId = decoded.sub;
+                }
+                catch (Exception)
+                {
+                    currentUserId = 0;
+                }
+
+                GetPostServiceResponse posts = _postService.GetPosts(postRequest, currentUserId);
 
                 return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
                     data: posts.data.ToList(),

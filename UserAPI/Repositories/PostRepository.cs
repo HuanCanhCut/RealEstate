@@ -165,7 +165,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public List<PostModel>? GetPosts(GetPostRequest request)
+        public List<PostModel>? GetPosts(GetPostRequest request, int currentUserId)
         {
             try
             {
@@ -174,9 +174,19 @@ namespace UserAPI.Repositories
                         *,
 
                         JSON_OBJECT(
+                            'id', post_details.id,
                             'area', post_details.area,
                             'price', post_details.price,
-                            'post_id', post_details.post_id
+                            'post_id', post_details.post_id,
+                            'bedrooms', post_details.bedrooms,
+                            'bathrooms', post_details.bathrooms,
+                            'balcony', post_details.balcony,
+                            'main_door', post_details.main_door,
+                            'legal_documents', post_details.legal_documents,
+                            'interior_status', post_details.interior_status,
+                            'deposit', post_details.deposit,
+                            'created_at', post_details.created_at,
+                            'updated_at', post_details.updated_at
                         ) AS json_post_detail,
 
                         JSON_OBJECT(
@@ -198,7 +208,7 @@ namespace UserAPI.Repositories
                             SELECT EXISTS (
                                 SELECT 1
                                 FROM favorites
-                                WHERE favorites.user_id = users.id
+                                WHERE favorites.user_id = {currentUserId}
                                 AND favorites.post_id = posts.id
                             )
                         ) AS is_favorite
