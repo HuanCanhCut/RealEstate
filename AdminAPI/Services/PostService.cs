@@ -36,21 +36,45 @@ namespace AdminAPI.Services
             }
         }
 
-        public int ApprovePost(int postId)
+        public int UpdatePostStatus(int postId, PostEnum type)
         {
             try
             {
                 PostModel post = this.GetPostById(postId);
 
-                if (post.post_status == PostEnum.approved)
+                //if (post.post_status == PostEnum.approved)
+                //{
+                //    throw new BadRequestError("Bài đăng đã được phê duyệt trước đó.");
+                //}
+
+                switch (type)
                 {
-                    throw new BadRequestError("Bài đăng đã được phê duyệt trước đó.");
+                    case PostEnum.approved:
+                        if (post.post_status == PostEnum.approved)
+                        {
+                            throw new BadRequestError("Bài đăng đã được phê duyệt trước đó.");
+                        }
+                        break;
+                    case PostEnum.rejected:
+                        if (post.post_status == PostEnum.rejected)
+                        {
+                            throw new BadRequestError("Bài đăng đã bị từ chối trước đó.");
+                        }
+                        break;
+                    case PostEnum.pending:
+                        if (post.post_status == PostEnum.pending)
+                        {
+                            throw new BadRequestError("Bài đăng đang ở trạng thái chờ xử lý.");
+                        }
+                        break;
+                    default:
+                        throw new BadRequestError("Loại trạng thái bài đăng không hợp lệ.");
                 }
 
-                int rowAffected = _postRepository.ApprovePost(postId);
+                int rowAffected = _postRepository.UpdatePostStatus(postId, type);
                 if (rowAffected == 0)
                 {
-                    throw new InternalServerError("Phê duyệt bài đăng thất bại.");
+                    throw new InternalServerError("Cập nhật bài đăng thất bại.");
                 }
                 return rowAffected;
             }
