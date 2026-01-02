@@ -11,7 +11,7 @@ namespace UserAPI.Repositories.Interfaces
     public interface IPostRepository
     {
         int CreatePost(CreatePostRequest post);
-        PostModel GetPostById(int id);
+        PostModel GetPostById(int id, int currentUserId);
         List<PostModel> GetPosts(GetPostRequest request, int currentUserId);
         int CountAll();
         List<PostModel> SearchPosts(string q);

@@ -119,7 +119,7 @@ namespace UserAPI.Controllers
                     throw new BadRequestError("post_id phải lớn hơn 0");
                 }
 
-                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
                 PostModel post = _postService.LikePost(post_id: id, user_id: decoded.sub);
 
@@ -143,7 +143,7 @@ namespace UserAPI.Controllers
                     throw new BadRequestError("post_id phải lớn hơn 0");
                 }
 
-                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
                 _postService.UnlikePost(post_id: id, user_id: decoded.sub);
 
@@ -161,7 +161,9 @@ namespace UserAPI.Controllers
         {
             try
             {
-                PostModel post = _postService.UpdatePost(id, request);
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
+
+                PostModel post = _postService.UpdatePost(id, request, decoded.sub);
 
                 return Ok(new ApiResponse<PostModel, object?>(post));
             }
@@ -177,7 +179,7 @@ namespace UserAPI.Controllers
         {
             try
             {
-                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
                 if (post_id <= 0)
                 {
@@ -199,7 +201,26 @@ namespace UserAPI.Controllers
         {
             try
             {
-                PostModel? post = _postService.GetPostById(id);
+                int currentUserId = 0;
+
+                try
+                {
+                    string accessToken = Request.Cookies["access_token"] ?? "";
+
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        throw new Exception();
+                    }
+
+                    JwtDecoded decoded = _jwt.ValidateToken(accessToken, Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "");
+                    currentUserId = decoded.sub;
+                }
+                catch (Exception)
+                {
+                    currentUserId = 0;
+                }
+
+                PostModel? post = _postService.GetPostById(id, currentUserId);
                 if (post == null)
                 {
                     throw new NotFoundError("Không tìm thấy bài đăng.");

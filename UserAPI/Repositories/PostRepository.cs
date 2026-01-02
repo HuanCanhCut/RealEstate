@@ -90,7 +90,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public PostModel? GetPostById(int id)
+        public PostModel? GetPostById(int id, int currentUserId)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace UserAPI.Repositories
                             SELECT EXISTS (
                                 SELECT 1
                                 FROM favorites
-                                WHERE favorites.user_id = users.id
+                                WHERE favorites.user_id = {currentUserId}
                                 AND favorites.post_id = posts.id
                             )
                         ) AS is_favorite

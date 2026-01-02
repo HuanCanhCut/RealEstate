@@ -15,9 +15,9 @@ namespace UserAPI.Services.Interfaces
         List<PostModel> SearchPosts(string q);
         PostModel LikePost(int post_id, int user_id);
         void UnlikePost(int post_id, int user_id);
-        PostModel UpdatePost(int id, UpdatePostRequest request);
+        PostModel UpdatePost(int id, UpdatePostRequest request, int currentUserId);
 
         void DeletePost(int post_id, int user_id);
-        PostModel GetPostById(int id);
+        PostModel GetPostById(int id, int currentUserId);
     }
 }

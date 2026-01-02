@@ -21,7 +21,7 @@ namespace UserAPI.Services
             {
                 int postId = _postRepository.CreatePost(post);
 
-                PostModel postData = this.GetPostById(postId);
+                PostModel postData = this.GetPostById(postId, 0);
 
                 return postData;
             }
@@ -39,11 +39,11 @@ namespace UserAPI.Services
             }
         }
 
-        public PostModel GetPostById(int id)
+        public PostModel GetPostById(int id, int currentUserId)
         {
             try
             {
-                return _postRepository.GetPostById(id);
+                return _postRepository.GetPostById(id, currentUserId);
             }
             catch (Exception ex)
             {
@@ -113,7 +113,7 @@ namespace UserAPI.Services
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(post_id);
+                PostModel post = _postRepository.GetPostById(post_id, user_id);
 
                 if (post == null)
                 {
@@ -154,7 +154,7 @@ namespace UserAPI.Services
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(post_id);
+                PostModel post = _postRepository.GetPostById(post_id, user_id);
 
                 if (post == null)
                 {
@@ -188,11 +188,11 @@ namespace UserAPI.Services
             }
         }
 
-        public PostModel UpdatePost(int id, UpdatePostRequest request)
+        public PostModel UpdatePost(int id, UpdatePostRequest request, int currentUserId)
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(id);
+                PostModel post = _postRepository.GetPostById(id, currentUserId);
 
                 if (post == null)
                 {
@@ -206,7 +206,7 @@ namespace UserAPI.Services
                     throw new InternalServerError("Lỗi khi cập nhật bài đăng");
                 }
 
-                return this.GetPostById(id);
+                return this.GetPostById(id, currentUserId);
             }
             catch (Exception ex)
             {
@@ -226,7 +226,7 @@ namespace UserAPI.Services
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(post_id);
+                PostModel post = _postRepository.GetPostById(post_id, user_id);
 
                 if (post == null)
                 {
