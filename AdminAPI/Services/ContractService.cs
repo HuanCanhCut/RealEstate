@@ -4,6 +4,7 @@ using AdminAPI.Models;
 using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
 using static AdminAPI.Errors.Error;
+using System.Text;
 
 namespace AdminAPI.Services
 {
@@ -139,6 +140,36 @@ namespace AdminAPI.Services
 
                 throw new InternalServerError(ex.Message);
             }
+        }
+
+        public byte[] ExportContractsCsv(ContractFilterRequest filter)
+        {
+            // Lấy toàn bộ danh sách theo filter
+            filter.page = 1;
+            filter.per_page = int.MaxValue;
+
+            var contracts = _contractRepository.FilterContracts(filter);
+
+            var sb = new StringBuilder();
+
+            // Header CSV
+            sb.AppendLine("ID,Customer,Agent,Post,Amount,Commission,Status,CreatedAt");
+
+            foreach (var c in contracts)
+            {
+                sb.AppendLine(
+                    $"{c.id}," +
+                    $"\"{c.json_customer?.full_name}\"," +
+                    $"\"{c.json_agent?.full_name}\"," +
+                    $"\"{c.json_post?.title}\"," +
+                    $"{c.amount}," +
+                    $"{c.commission}," +
+                    $"{c.status}," +
+                    $"{c.created_at:yyyy-MM-dd}"
+                );
+            }
+
+            return Encoding.UTF8.GetBytes(sb.ToString());
         }
     }
 }

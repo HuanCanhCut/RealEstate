@@ -13,5 +13,8 @@ namespace AdminAPI.Services.Interfaces
 
         bool DeleteContract(int id);
         ServiceResponsePagination<ContractModel> FilterContracts(ContractFilterRequest filter);
+
+        byte[] ExportContractsCsv(ContractFilterRequest filter);
+
     }
 }

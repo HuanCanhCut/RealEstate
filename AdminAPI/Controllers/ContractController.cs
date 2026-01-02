@@ -114,5 +114,17 @@ namespace AdminAPI.Controllers
             }
         }
 
+        [HttpGet("export-csv")]
+        public IActionResult ExportCsv([FromQuery] ContractFilterRequest filter)
+        {
+            var fileBytes = _contractService.ExportContractsCsv(filter);
+
+            return File(
+                fileBytes,
+                "text/csv",
+                $"contracts_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+            );
+        }
+
     }
 }
