@@ -100,5 +100,19 @@ namespace AdminAPI.Controllers
             }
         }
 
+        [HttpGet("filter")]
+        public IActionResult FilterContracts([FromQuery] ContractFilterRequest filter)
+        {
+            try
+            {
+                var data = _contractService.FilterContracts(filter);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

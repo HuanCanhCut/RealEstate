@@ -1,11 +1,12 @@
-﻿using AdminAPI.Models;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.Models;
 
 namespace AdminAPI.Repositories.Interfaces
 {
     public interface IContractResponsitory
     {
-        public int CountAll();
-        public List<ContractModel> GetContracts(int page, int perPage);
+        int CountAll();
+        List<ContractModel> GetContracts(int page, int perPage);
 
         ContractModel GetContractById(int id);
 
@@ -13,5 +14,8 @@ namespace AdminAPI.Repositories.Interfaces
 
         bool DeleteContract(int id);
 
+        List<ContractModel> FilterContracts(ContractFilterRequest filter);
+
+        int CountFiltered(ContractFilterRequest filter);
     }
 }

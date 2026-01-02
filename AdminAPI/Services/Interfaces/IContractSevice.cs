@@ -1,4 +1,5 @@
-﻿using AdminAPI.DTO.Response;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.DTO.Response;
 using AdminAPI.Models;
 
 namespace AdminAPI.Services.Interfaces
@@ -11,6 +12,6 @@ namespace AdminAPI.Services.Interfaces
         bool UpdateStatus(int contractId, string status);
 
         bool DeleteContract(int id);
-
+        ServiceResponsePagination<ContractModel> FilterContracts(ContractFilterRequest filter);
     }
 }

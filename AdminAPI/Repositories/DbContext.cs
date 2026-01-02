@@ -6,6 +6,7 @@ namespace AdminAPI.Repositories
     public class DbContext
     {
         private string connectionString { get; set; }
+        public object Connection { get; internal set; }
 
         public DbContext()
         {

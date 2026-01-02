@@ -1,4 +1,5 @@
-﻿using AdminAPI.DTO.Response;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.DTO.Response;
 using AdminAPI.Models;
 using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
@@ -118,5 +119,26 @@ namespace AdminAPI.Services
             }
         }
 
+        public ServiceResponsePagination<ContractModel> FilterContracts(ContractFilterRequest filter)
+        {
+            try
+            {
+                List<ContractModel> contracts = _contractRepository.FilterContracts(filter);
+                int totalContracts = _contractRepository.CountFiltered(filter);
+
+                return new ServiceResponsePagination<ContractModel>
+                {
+                    data = contracts,
+                    total = totalContracts,
+                    count = contracts.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) throw;
+
+                throw new InternalServerError(ex.Message);
+            }
+        }
     }
 }
