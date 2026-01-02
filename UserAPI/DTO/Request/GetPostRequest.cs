@@ -7,6 +7,13 @@ using UserAPI.Models.Enums;
 
 namespace UserAPI.DTO.Request
 {
+    public enum Role
+    {
+        all,
+        agent,
+        user
+    }
+
     public class GetPostRequest
     {
         [Range(1, int.MaxValue, ErrorMessage = "Page phải lớn hơn 0")]
@@ -22,6 +29,9 @@ namespace UserAPI.DTO.Request
         public decimal? max_price { get; set; }
 
         public string[]? property_categories { get; set; }
+
+        public Role role { get; set; } = Role.all;
+        public string? location { get; set; }
 
     }
 }

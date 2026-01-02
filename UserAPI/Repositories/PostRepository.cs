@@ -116,6 +116,7 @@ namespace UserAPI.Repositories
                         JSON_OBJECT(
                             'id', categories.id,
                             'name', categories.name,
+                            'key', categories.key,
                             'created_at', categories.created_at,
                             'updated_at', categories.updated_at
                         ) AS json_category,
@@ -192,6 +193,7 @@ namespace UserAPI.Repositories
                         JSON_OBJECT(
                             'id', categories.id,
                             'name', categories.name,
+                            'key', categories.key,
                             'created_at', categories.created_at,
                             'updated_at', categories.updated_at
                         ) AS json_category,
@@ -232,7 +234,7 @@ namespace UserAPI.Repositories
 
                 if (!String.IsNullOrEmpty(request.property_categories?.Length.ToString()))
                 {
-                    sql += $" AND categories.name IN ({string.Join(", ", request.property_categories.Select(x => $"'{x}'"))})";
+                    sql += $" AND categories.key IN ({string.Join(", ", request.property_categories.Select(x => $"'{x}'"))})";
                 }
 
                 if (request.project_type != null)
@@ -250,7 +252,17 @@ namespace UserAPI.Repositories
                     sql += $" AND post_details.price <= {request.max_price}";
                 }
 
-                sql += $" LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
+                if (request.role != Role.all)
+                {
+                    sql += $" AND posts.role = '{request.role}'";
+                }
+
+                if (request.location != null && request.location != "all")
+                {
+                    sql += $" AND administrative_address LIKE '%{request.location}%'";
+                }
+
+                sql += $" ORDER BY posts.id DESC LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
