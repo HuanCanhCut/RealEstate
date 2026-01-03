@@ -3,8 +3,6 @@ using System.Xml;
 using UserAPI.Middlewares;
 using UserAPI.Repositories;
 using UserAPI.Repositories.Interfaces;
-using UserAPI.Repositories;
-using UserAPI.Repositories.Interfaces;
 using UserAPI.Services;
 using UserAPI.Services.Interfaces;
 using UserAPI.Utils;

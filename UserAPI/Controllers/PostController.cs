@@ -32,7 +32,7 @@ namespace UserAPI.Controllers
             {
                 PostModel post = _postService.CreatePost(postRequest);
 
-                return CreatedAtAction(nameof(CreatePost), post);
+                return CreatedAtAction(nameof(CreatePost), new ApiResponse<PostModel, object?>(data: post));
             }
             catch (Exception)
             {

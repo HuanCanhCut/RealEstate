@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminAPI.Controllers
 {
-    [VerifyToken]
-    [VerifyAdmin]
     [ApiController]
     [Route("api/categories")]
     public class CategoriesController(
@@ -26,7 +24,6 @@ namespace AdminAPI.Controllers
         private readonly ICategoryService _categoryService = categoryService;
         private readonly IJWT _jwt = jwt;
 
-        [AllowAnonymous]
         [HttpGet]
         public ActionResult<ApiResponse<List<CategoryModel>, object?>> GetCategories()
         {
@@ -51,6 +48,9 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+
+        [VerifyToken]
+        [VerifyAdmin]
         [HttpPost]
         public ActionResult<ApiResponse<CategoryModel, object?>> CreateCategory(CreateCategoryRequest request)
         {
@@ -70,6 +70,8 @@ namespace AdminAPI.Controllers
             }
         }
 
+        [VerifyToken]
+        [VerifyAdmin]
         [HttpPut("{id}")]
         public ActionResult<ApiResponse<CategoryModel, object?>> UpdateCategory(int id, UpdateCategoryRequest request)
         {
@@ -87,6 +89,8 @@ namespace AdminAPI.Controllers
             }
         }
 
+        [VerifyToken]
+        [VerifyAdmin]
         [HttpDelete("{id}")]
         public ActionResult<ApiResponse<object, object?>> DeleteCategory(int id)
         {

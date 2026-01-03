@@ -21,7 +21,7 @@ namespace UserAPI.Services
             {
                 int postId = _postRepository.CreatePost(post);
 
-                PostModel postData = this.GetPostById(postId, 0);
+                PostModel postData = this.GetPostById(postId, 0, true);
 
                 return postData;
             }
@@ -39,11 +39,11 @@ namespace UserAPI.Services
             }
         }
 
-        public PostModel GetPostById(int id, int currentUserId)
+        public PostModel GetPostById(int id, int currentUserId, bool force = false) // force = true: lấy bài đăng dù đã bị xóa, chưa duyệt, chưa bàn giao, ...
         {
             try
             {
-                return _postRepository.GetPostById(id, currentUserId);
+                return _postRepository.GetPostById(id, currentUserId, force);
             }
             catch (Exception ex)
             {

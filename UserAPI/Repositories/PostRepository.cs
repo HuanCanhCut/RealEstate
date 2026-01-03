@@ -90,7 +90,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public PostModel? GetPostById(int id, int currentUserId)
+        public PostModel? GetPostById(int id, int currentUserId, bool force = false)
         {
             try
             {
@@ -150,11 +150,17 @@ namespace UserAPI.Repositories
                     ) user_post_count ON user_post_count.user_id = users.id
 
                     WHERE posts.id = {id}
-                    AND posts.post_status = 'approved'
-                    AND posts.status = 'Chưa bàn giao'
-                    AND posts.is_deleted = 0
-                    AND posts.deleted_at IS NULL
                 ";
+
+                if (!force)
+                {
+                    sql += $@"
+                        AND posts.post_status = 'approved'
+                        AND posts.status = 'Chưa bàn giao'
+                        AND posts.is_deleted = 0
+                        AND posts.deleted_at IS NULL
+                    ";
+                }
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
