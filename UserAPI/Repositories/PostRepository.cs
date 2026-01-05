@@ -90,7 +90,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public PostModel? GetPostById(int id)
+        public PostModel? GetPostById(int id, int currentUserId, bool force = false)
         {
             try
             {
@@ -99,6 +99,7 @@ namespace UserAPI.Repositories
                         *,
                         JSON_OBJECT(
                             'id', post_details.id,
+                            'type', post_details.type,
                             'area', post_details.area,
                             'price', post_details.price,
                             'post_id', post_details.post_id,
@@ -116,6 +117,7 @@ namespace UserAPI.Repositories
                         JSON_OBJECT(
                             'id', categories.id,
                             'name', categories.name,
+                            'key', categories.key,
                             'created_at', categories.created_at,
                             'updated_at', categories.updated_at
                         ) AS json_category,
@@ -133,7 +135,7 @@ namespace UserAPI.Repositories
                             SELECT EXISTS (
                                 SELECT 1
                                 FROM favorites
-                                WHERE favorites.user_id = users.id
+                                WHERE favorites.user_id = {currentUserId}
                                 AND favorites.post_id = posts.id
                             )
                         ) AS is_favorite
@@ -149,11 +151,17 @@ namespace UserAPI.Repositories
                     ) user_post_count ON user_post_count.user_id = users.id
 
                     WHERE posts.id = {id}
-                    AND posts.post_status = 'approved'
-                    AND posts.status = 'Chưa bàn giao'
-                    AND posts.is_deleted = 0
-                    AND posts.deleted_at IS NULL
                 ";
+
+                if (!force)
+                {
+                    sql += $@"
+                        AND posts.post_status = 'approved'
+                        AND posts.status = 'Chưa bàn giao'
+                        AND posts.is_deleted = 0
+                        AND posts.deleted_at IS NULL
+                    ";
+                }
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
@@ -165,7 +173,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public List<PostModel>? GetPosts(GetPostRequest request)
+        public List<PostModel>? GetPosts(GetPostRequest request, int currentUserId)
         {
             try
             {
@@ -174,14 +182,26 @@ namespace UserAPI.Repositories
                         *,
 
                         JSON_OBJECT(
+                            'id', post_details.id,
+                            'type', post_details.type,
                             'area', post_details.area,
                             'price', post_details.price,
-                            'post_id', post_details.post_id
+                            'post_id', post_details.post_id,
+                            'bedrooms', post_details.bedrooms,
+                            'bathrooms', post_details.bathrooms,
+                            'balcony', post_details.balcony,
+                            'main_door', post_details.main_door,
+                            'legal_documents', post_details.legal_documents,
+                            'interior_status', post_details.interior_status,
+                            'deposit', post_details.deposit,
+                            'created_at', post_details.created_at,
+                            'updated_at', post_details.updated_at
                         ) AS json_post_detail,
 
                         JSON_OBJECT(
                             'id', categories.id,
                             'name', categories.name,
+                            'key', categories.key,
                             'created_at', categories.created_at,
                             'updated_at', categories.updated_at
                         ) AS json_category,
@@ -198,7 +218,7 @@ namespace UserAPI.Repositories
                             SELECT EXISTS (
                                 SELECT 1
                                 FROM favorites
-                                WHERE favorites.user_id = users.id
+                                WHERE favorites.user_id = {currentUserId}
                                 AND favorites.post_id = posts.id
                             )
                         ) AS is_favorite
@@ -222,7 +242,7 @@ namespace UserAPI.Repositories
 
                 if (!String.IsNullOrEmpty(request.property_categories?.Length.ToString()))
                 {
-                    sql += $" AND categories.name IN ({string.Join(", ", request.property_categories.Select(x => $"'{x}'"))})";
+                    sql += $" AND categories.key IN ({string.Join(", ", request.property_categories.Select(x => $"'{x}'"))})";
                 }
 
                 if (request.project_type != null)
@@ -240,7 +260,17 @@ namespace UserAPI.Repositories
                     sql += $" AND post_details.price <= {request.max_price}";
                 }
 
-                sql += $" LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
+                if (request.role != Role.all)
+                {
+                    sql += $" AND posts.role = '{request.role}'";
+                }
+
+                if (request.location != null && request.location != "all")
+                {
+                    sql += $" AND administrative_address LIKE '%{request.location}%'";
+                }
+
+                sql += $" ORDER BY posts.id DESC LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
 
@@ -276,7 +306,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public List<PostModel> SearchPosts(string q)
+        public List<PostModel> SearchPosts(string q, int page, int per_page)
         {
             try
             {
@@ -297,7 +327,7 @@ namespace UserAPI.Repositories
                         posts
                     WHERE
                         MATCH(title, address, administrative_address) AGAINST ('{q}*' IN BOOLEAN MODE)
-                    LIMIT 5;
+                    LIMIT {per_page} OFFSET {(page - 1) * per_page}
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);

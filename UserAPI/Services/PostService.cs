@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserAPI.DTO.Request;
+using UserAPI.DTO.Response;
 using UserAPI.DTO.ServiceResponse;
 using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
@@ -21,7 +22,7 @@ namespace UserAPI.Services
             {
                 int postId = _postRepository.CreatePost(post);
 
-                PostModel postData = this.GetPostById(postId);
+                PostModel postData = this.GetPostById(postId, 0, true);
 
                 return postData;
             }
@@ -39,11 +40,11 @@ namespace UserAPI.Services
             }
         }
 
-        public PostModel GetPostById(int id)
+        public PostModel GetPostById(int id, int currentUserId, bool force = false) // force = true: lấy bài đăng dù đã bị xóa, chưa duyệt, chưa bàn giao, ...
         {
             try
             {
-                return _postRepository.GetPostById(id);
+                return _postRepository.GetPostById(id, currentUserId, force);
             }
             catch (Exception ex)
             {
@@ -59,11 +60,11 @@ namespace UserAPI.Services
             }
         }
 
-        public GetPostServiceResponse GetPosts(GetPostRequest request)
+        public GetPostServiceResponse GetPosts(GetPostRequest request, int currentUserId)
         {
             try
             {
-                List<PostModel>? result = _postRepository.GetPosts(request);
+                List<PostModel>? result = _postRepository.GetPosts(request, currentUserId);
                 int total = _postRepository.CountAll();
 
                 return new GetPostServiceResponse
@@ -87,13 +88,21 @@ namespace UserAPI.Services
             }
         }
 
-        public List<PostModel> SearchPosts(string q)
+        public ServiceResponsePagination<PostModel> SearchPosts(string q, int page, int per_page)
         {
             try
             {
-                List<PostModel>? posts = _postRepository.SearchPosts(q);
+                List<PostModel>? posts = _postRepository.SearchPosts(q, page, per_page);
 
-                return posts;
+                int total = _postRepository.CountAll();
+
+                return new ServiceResponsePagination<PostModel>
+                {
+                    count = posts.Count(),
+                    total = total,
+                    data = posts,
+                };
+
             }
             catch (Exception ex)
             {
@@ -113,7 +122,7 @@ namespace UserAPI.Services
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(post_id);
+                PostModel post = _postRepository.GetPostById(post_id, user_id);
 
                 if (post == null)
                 {
@@ -154,7 +163,7 @@ namespace UserAPI.Services
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(post_id);
+                PostModel post = _postRepository.GetPostById(post_id, user_id);
 
                 if (post == null)
                 {
@@ -188,11 +197,11 @@ namespace UserAPI.Services
             }
         }
 
-        public PostModel UpdatePost(int id, UpdatePostRequest request)
+        public PostModel UpdatePost(int id, UpdatePostRequest request, int currentUserId)
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(id);
+                PostModel post = _postRepository.GetPostById(id, currentUserId);
 
                 if (post == null)
                 {
@@ -206,7 +215,7 @@ namespace UserAPI.Services
                     throw new InternalServerError("Lỗi khi cập nhật bài đăng");
                 }
 
-                return this.GetPostById(id);
+                return this.GetPostById(id, currentUserId);
             }
             catch (Exception ex)
             {
@@ -226,7 +235,7 @@ namespace UserAPI.Services
         {
             try
             {
-                PostModel post = _postRepository.GetPostById(post_id);
+                PostModel post = _postRepository.GetPostById(post_id, user_id);
 
                 if (post == null)
                 {

@@ -11,10 +11,10 @@ namespace UserAPI.Repositories.Interfaces
     public interface IPostRepository
     {
         int CreatePost(CreatePostRequest post);
-        PostModel GetPostById(int id);
-        List<PostModel> GetPosts(GetPostRequest request);
+        PostModel GetPostById(int id, int currentUserId, bool force = false);
+        List<PostModel> GetPosts(GetPostRequest request, int currentUserId);
         int CountAll();
-        List<PostModel> SearchPosts(string q);
+        List<PostModel> SearchPosts(string q, int page, int per_page);
         int LikePost(int post_id, int user_id);
 
         int UnlikePost(int post_id, int user_id);
