@@ -70,7 +70,7 @@ namespace UserAPI.Services
 
                 if (rowsAffected == 0)
                 {
-                    throw new UnauthorizedError("Unauthorize");
+                    throw new BadRequestError("Cập nhật profile thất bại");
                 }
 
                 UserModel? updatedUser = _userRepository.GetUserById(currentUserId);

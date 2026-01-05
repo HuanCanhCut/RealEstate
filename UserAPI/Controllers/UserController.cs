@@ -9,7 +9,6 @@ using UserAPI.Utils;
 
 namespace UserAPI.Controllers
 {
-    [VerifyToken]
     [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
@@ -19,6 +18,9 @@ namespace UserAPI.Controllers
         {
             _userService = userService;
         }
+
+        [VerifyToken]
+
         [HttpGet("me")]
         public ActionResult<ApiResponse<UserModel, object?>> getCurrentUser()
         {
@@ -48,6 +50,8 @@ namespace UserAPI.Controllers
                 throw;
             }
         }
+
+        [VerifyToken]
 
         [HttpPut("me/update")]
         public ActionResult<ApiResponse<UserModel, object?>> updateCurrentUser([FromBody] UpdateCurrentUserRequest request)
