@@ -99,6 +99,7 @@ namespace UserAPI.Repositories
                         *,
                         JSON_OBJECT(
                             'id', post_details.id,
+                            'type', post_details.type,
                             'area', post_details.area,
                             'price', post_details.price,
                             'post_id', post_details.post_id,
@@ -182,6 +183,7 @@ namespace UserAPI.Repositories
 
                         JSON_OBJECT(
                             'id', post_details.id,
+                            'type', post_details.type,
                             'area', post_details.area,
                             'price', post_details.price,
                             'post_id', post_details.post_id,
@@ -304,7 +306,7 @@ namespace UserAPI.Repositories
             }
         }
 
-        public List<PostModel> SearchPosts(string q)
+        public List<PostModel> SearchPosts(string q, int page, int per_page)
         {
             try
             {
@@ -325,7 +327,7 @@ namespace UserAPI.Repositories
                         posts
                     WHERE
                         MATCH(title, address, administrative_address) AGAINST ('{q}*' IN BOOLEAN MODE)
-                    LIMIT 5;
+                    LIMIT {per_page} OFFSET {(page - 1) * per_page}
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);

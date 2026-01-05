@@ -86,7 +86,9 @@ namespace UserAPI.Controllers
 
         [HttpGet("search")]
         public ActionResult<ApiResponse<List<PostModel>, MetaPagination>> SearchPosts(
-               [FromQuery] string q
+               [FromQuery] string q,
+               [FromQuery] int page = 1,
+               [FromQuery] int per_page = 15
            )
         {
             try
@@ -96,10 +98,26 @@ namespace UserAPI.Controllers
                     throw new BadRequestError("q is required");
                 }
 
-                List<PostModel> posts = _postService.SearchPosts(q);
+                if (page <= 0)
+                {
+                    throw new BadRequestError("page phải lớn hơn 0");
+                }
 
-                return Ok(new ApiResponse<List<PostModel>, object?>(
-                    data: posts
+                if (per_page <= 0)
+                {
+                    throw new BadRequestError("per_page phải lớn hơn 0");
+                }
+
+                ServiceResponsePagination<PostModel> posts = _postService.SearchPosts(q, page, per_page);
+
+                return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
+                    data: posts.data,
+                    meta: new MetaPagination(
+                        total: posts.total,
+                        count: posts.count,
+                        current_page: page,
+                        per_page: per_page
+                    )
                 ));
             }
             catch (Exception)

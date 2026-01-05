@@ -13,6 +13,7 @@ namespace UserAPI.Models
         public int? area { get; set; }
         public string? price { get; set; }
         public string? deposit { get; set; }
+        public string? type { get; set; }
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
     }

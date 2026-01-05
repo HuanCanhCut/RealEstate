@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserAPI.DTO.Request;
+using UserAPI.DTO.Response;
 using UserAPI.DTO.ServiceResponse;
 using UserAPI.Models;
 using UserAPI.Repositories.Interfaces;
@@ -87,13 +88,21 @@ namespace UserAPI.Services
             }
         }
 
-        public List<PostModel> SearchPosts(string q)
+        public ServiceResponsePagination<PostModel> SearchPosts(string q, int page, int per_page)
         {
             try
             {
-                List<PostModel>? posts = _postRepository.SearchPosts(q);
+                List<PostModel>? posts = _postRepository.SearchPosts(q, page, per_page);
 
-                return posts;
+                int total = _postRepository.CountAll();
+
+                return new ServiceResponsePagination<PostModel>
+                {
+                    count = posts.Count(),
+                    total = total,
+                    data = posts,
+                };
+
             }
             catch (Exception ex)
             {

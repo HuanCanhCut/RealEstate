@@ -15,7 +15,7 @@ namespace AdminAPI.Middlewares
         {
             try
             {
-                var jwtToken = context.HttpContext.RequestServices.GetService<IJWT>();
+                IJWT? jwtToken = context.HttpContext.RequestServices.GetService<IJWT>();
 
                 if (jwtToken == null)
                 {
