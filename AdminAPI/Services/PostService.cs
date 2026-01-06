@@ -1,4 +1,5 @@
-﻿using AdminAPI.Models;
+﻿using AdminAPI.DTO.Response;
+using AdminAPI.Models;
 using AdminAPI.Models.Enums;
 using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
@@ -41,11 +42,6 @@ namespace AdminAPI.Services
             try
             {
                 PostModel post = this.GetPostById(postId);
-
-                //if (post.post_status == PostEnum.approved)
-                //{
-                //    throw new BadRequestError("Bài đăng đã được phê duyệt trước đó.");
-                //}
 
                 switch (type)
                 {
@@ -119,6 +115,31 @@ namespace AdminAPI.Services
             catch (Exception ex)
             {
                 if (ex is AppError) { throw; }
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public ServiceResponsePagination<PostModel> GetPosts(int page, int per_page, PostEnum? post_status, ProjectType? project_type, int? category_id)
+        {
+            try
+            {
+                // return _postRepository.GetPosts(page, per_page, post_status, project_type, category_id);
+                int total = this.CountAll();
+                List<PostModel> posts = _postRepository.GetPosts(page, per_page, post_status, project_type, category_id);
+
+                return new ServiceResponsePagination<PostModel>
+                {
+                    data = posts,
+                    total = total,
+                    count = posts.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError)
+                {
+                    throw;
+                }
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }

@@ -58,5 +58,45 @@ namespace AdminAPI.Repositories
             }
             catch (Exception) { throw; }
         }
+
+        public List<PostModel> GetPosts(int page, int per_page, PostEnum? post_status, ProjectType? project_type, int? category_id)
+        {
+            try
+            {
+                string sql = @$"
+                    SELECT *, 
+                        JSON_OBJECT(
+                            'id', post_details.id,
+                            'price', post_details.price,
+                            'created_at', post_details.created_at,
+                            'updated_at', post_details.updated_at
+                        ) as json_post_detail
+                    FROM posts
+                    JOIN post_details ON posts.id = post_details.post_id
+                    WHERE is_deleted = 0
+                    AND deleted_at IS NULL
+                    AND 1=1
+                ";
+
+                if (post_status != null)
+                {
+                    sql += $" AND post_status = '{post_status}'";
+                }
+                if (project_type != null)
+                {
+                    sql += $" AND project_type = '{project_type}'";
+                }
+                if (category_id != null)
+                {
+                    sql += $" AND category_id = {category_id}";
+                }
+
+                sql += $" ORDER BY posts.id DESC";
+                sql += $" LIMIT {per_page} OFFSET {(page - 1) * per_page}";
+
+                return _dbContext.ExecuteQuery(sql).ConvertTo<PostModel>()!;
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

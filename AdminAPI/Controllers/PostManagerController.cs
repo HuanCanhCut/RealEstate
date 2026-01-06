@@ -1,5 +1,7 @@
-﻿using AdminAPI.DTO.Response;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.DTO.Response;
 using AdminAPI.Middlewares;
+using AdminAPI.Models;
 using AdminAPI.Models.Enums;
 using AdminAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -81,6 +83,28 @@ namespace AdminAPI.Controllers
             {
                 _postService.DeletePost(id);
                 return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<ApiResponse<List<PostModel>, MetaPagination>> GetPosts([FromQuery] GetPostsRequest request)
+        {
+            try
+            {
+                ServiceResponsePagination<PostModel> posts = _postService.GetPosts(request.page, request.per_page, request.post_status, request.project_type, request.category_id);
+                return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
+                    data: posts.data,
+                    meta: new MetaPagination(
+                        total: posts.total,
+                        count: posts.count,
+                        current_page: request.page,
+                        per_page: request.per_page
+                    )
+                ));
             }
             catch (Exception)
             {
