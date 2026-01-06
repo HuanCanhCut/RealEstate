@@ -75,5 +75,19 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+
+        [HttpGet("posts/overview")]
+        public ActionResult<ApiResponse<PostOverviewResponse, object?>> GetPostsOverview()
+        {
+            try
+            {
+                PostOverviewResponse response = _analyticsService.GetPostsOverview();
+                return Ok(new ApiResponse<PostOverviewResponse, object?>(response));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

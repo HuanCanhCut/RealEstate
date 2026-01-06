@@ -102,5 +102,17 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public PostOverviewResponse GetPostsOverview()
+        {
+            try
+            {
+                return _analyticsRepository.GetPostsOverview();
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
     }
 }

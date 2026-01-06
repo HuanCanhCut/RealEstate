@@ -101,5 +101,33 @@ namespace AdminAPI.Repositories
                 throw;
             }
         }
+
+        public PostOverviewResponse GetPostsOverview()
+        {
+            try
+            {
+                string sql = @$"
+                    SELECT
+                        COUNT(id) AS total_posts,
+                        COUNT(CASE WHEN post_status = 'approved' THEN 1 END) AS approved_count,
+                        COUNT(CASE WHEN post_status = 'pending' THEN 1 END) AS pending_count,
+                        COUNT(CASE WHEN post_status = 'rejected' THEN 1 END) AS rejected_count
+                    FROM posts;
+                ";
+
+                DataTable table = _dbContext.ExecuteQuery(sql);
+
+                return new PostOverviewResponse(
+                    Convert.ToInt32(table.Rows[0]["total_posts"]),
+                    Convert.ToInt32(table.Rows[0]["approved_count"]),
+                    Convert.ToInt32(table.Rows[0]["pending_count"]),
+                    Convert.ToInt32(table.Rows[0]["rejected_count"])
+                );
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -17,5 +17,7 @@ namespace AdminAPI.Repositories.Interfaces
         public Overview GetOverview(DateTime startDate, DateTime endDate);
         public List<PostLocation> GetPostsLocation(DateTime startDate, DateTime endDate, int limit, List<string>? locations = null);
 
+        public PostOverviewResponse GetPostsOverview();
+
     }
 }

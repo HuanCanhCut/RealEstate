@@ -15,5 +15,7 @@ namespace AdminAPI.Services.Interfaces
 
         public bool DeleteUser(int id);
 
+        public PostOverviewResponse GetPostsOverview();
+
     }
 }
