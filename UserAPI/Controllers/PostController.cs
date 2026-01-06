@@ -12,15 +12,17 @@ using UserAPI.Middlewares;
 using UserAPI.Models;
 using UserAPI.Services.Interfaces;
 using UserAPI.Utils;
+using UserAPI.Utils.Interfaces;
 using static UserAPI.Errors.Error;
 
 namespace UserAPI.Controllers
 {
     [ApiController]
     [Route("api/posts")]
-    public class PostController(IPostService postService) : ControllerBase
+    public class PostController(IPostService postService, IJWT jwt) : ControllerBase
     {
         private readonly IPostService _postService = postService;
+        private readonly IJWT _jwt = jwt;
 
         [VerifyToken]
         [HttpPost]
@@ -30,7 +32,7 @@ namespace UserAPI.Controllers
             {
                 PostModel post = _postService.CreatePost(postRequest);
 
-                return CreatedAtAction(nameof(CreatePost), post);
+                return CreatedAtAction(nameof(CreatePost), new ApiResponse<PostModel, object?>(data: post));
             }
             catch (Exception)
             {
@@ -45,7 +47,26 @@ namespace UserAPI.Controllers
         {
             try
             {
-                GetPostServiceResponse posts = _postService.GetPosts(postRequest);
+                int currentUserId = 0;
+
+                try
+                {
+                    string accessToken = Request.Cookies["access_token"] ?? "";
+
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        throw new Exception();
+                    }
+
+                    JwtDecoded decoded = _jwt.ValidateToken(accessToken, Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "");
+                    currentUserId = decoded.sub;
+                }
+                catch (Exception)
+                {
+                    currentUserId = 0;
+                }
+
+                GetPostServiceResponse posts = _postService.GetPosts(postRequest, currentUserId);
 
                 return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
                     data: posts.data.ToList(),
@@ -65,7 +86,9 @@ namespace UserAPI.Controllers
 
         [HttpGet("search")]
         public ActionResult<ApiResponse<List<PostModel>, MetaPagination>> SearchPosts(
-               [FromQuery] string q
+               [FromQuery] string q,
+               [FromQuery] int page = 1,
+               [FromQuery] int per_page = 15
            )
         {
             try
@@ -75,10 +98,26 @@ namespace UserAPI.Controllers
                     throw new BadRequestError("q is required");
                 }
 
-                List<PostModel> posts = _postService.SearchPosts(q);
+                if (page <= 0)
+                {
+                    throw new BadRequestError("page phải lớn hơn 0");
+                }
 
-                return Ok(new ApiResponse<List<PostModel>, object?>(
-                    data: posts
+                if (per_page <= 0)
+                {
+                    throw new BadRequestError("per_page phải lớn hơn 0");
+                }
+
+                ServiceResponsePagination<PostModel> posts = _postService.SearchPosts(q, page, per_page);
+
+                return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
+                    data: posts.data,
+                    meta: new MetaPagination(
+                        total: posts.total,
+                        count: posts.count,
+                        current_page: page,
+                        per_page: per_page
+                    )
                 ));
             }
             catch (Exception)
@@ -98,7 +137,7 @@ namespace UserAPI.Controllers
                     throw new BadRequestError("post_id phải lớn hơn 0");
                 }
 
-                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
                 PostModel post = _postService.LikePost(post_id: id, user_id: decoded.sub);
 
@@ -122,7 +161,7 @@ namespace UserAPI.Controllers
                     throw new BadRequestError("post_id phải lớn hơn 0");
                 }
 
-                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
                 _postService.UnlikePost(post_id: id, user_id: decoded.sub);
 
@@ -140,7 +179,9 @@ namespace UserAPI.Controllers
         {
             try
             {
-                PostModel post = _postService.UpdatePost(id, request);
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
+
+                PostModel post = _postService.UpdatePost(id, request, decoded.sub);
 
                 return Ok(new ApiResponse<PostModel, object?>(post));
             }
@@ -156,7 +197,7 @@ namespace UserAPI.Controllers
         {
             try
             {
-                JwtDecoded decoded = HttpContext.Items["decoded"] as JwtDecoded;
+                JwtDecoded decoded = (JwtDecoded)HttpContext.Items["decoded"]!;
 
                 if (post_id <= 0)
                 {
@@ -178,7 +219,26 @@ namespace UserAPI.Controllers
         {
             try
             {
-                PostModel? post = _postService.GetPostById(id);
+                int currentUserId = 0;
+
+                try
+                {
+                    string accessToken = Request.Cookies["access_token"] ?? "";
+
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        throw new Exception();
+                    }
+
+                    JwtDecoded decoded = _jwt.ValidateToken(accessToken, Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "");
+                    currentUserId = decoded.sub;
+                }
+                catch (Exception)
+                {
+                    currentUserId = 0;
+                }
+
+                PostModel? post = _postService.GetPostById(id, currentUserId);
                 if (post == null)
                 {
                     throw new NotFoundError("Không tìm thấy bài đăng.");

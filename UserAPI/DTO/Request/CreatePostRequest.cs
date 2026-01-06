@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using UserAPI.Models.Enums;
 
@@ -60,7 +61,7 @@ namespace UserAPI.DTO.Request
         [EnumDataType(typeof(PostUserRole))]
         public required PostUserRole role { get; set; }
 
-        public IFormFile[]? images { get; set; }
+        public string? images { get; set; }
 
         public PostDetail details { get; set; }
     }

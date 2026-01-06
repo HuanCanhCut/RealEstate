@@ -101,8 +101,8 @@ namespace UserAPI.Controllers
                 string? accessToken = Request.Cookies["access_token"];
                 string? refreshToken = Request.Cookies["refresh_token"];
 
-                Response.Cookies.Delete("access_token");
-                Response.Cookies.Delete("refresh_token");
+                Response.Cookies.Delete("access_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true });
+                Response.Cookies.Delete("refresh_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true });
 
                 return NoContent();
             }
@@ -170,8 +170,8 @@ namespace UserAPI.Controllers
             catch (Exception ex)
             {
                 // clear cookies
-                Response.Cookies.Delete("access_token");
-                Response.Cookies.Delete("refresh_token");
+                Response.Cookies.Delete("access_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true });
+                Response.Cookies.Delete("refresh_token", new CookieOptions { SameSite = SameSiteMode.None, Secure = true });
 
                 throw;
             }

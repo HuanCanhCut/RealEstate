@@ -20,7 +20,6 @@ namespace UserAPI.Controllers
         }
 
         [VerifyToken]
-
         [HttpGet("me")]
         public ActionResult<ApiResponse<UserModel, object?>> getCurrentUser()
         {
@@ -52,7 +51,6 @@ namespace UserAPI.Controllers
         }
 
         [VerifyToken]
-
         [HttpPut("me/update")]
         public ActionResult<ApiResponse<UserModel, object?>> updateCurrentUser([FromBody] UpdateCurrentUserRequest request)
         {

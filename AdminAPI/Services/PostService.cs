@@ -100,16 +100,16 @@ namespace AdminAPI.Services
             }
         }
 
-        public void DeletePost(int postId)
+        public void DeletePost(int post_id)
         {
             try
             {
-                PostModel post = this.GetPostById(postId);
+                PostModel post = this.GetPostById(post_id);
                 if (post == null)
                 {
                     throw new NotFoundError("Không tìm thấy bài đăng.");
                 }
-               int rowAffected = _postRepository.DeletePost(postId);
+                int rowAffected = _postRepository.DeletePost(post_id);
 
                 if (rowAffected == 0)
                 {
