@@ -99,5 +99,26 @@ namespace AdminAPI.Services
                 throw new InternalServerError(ex.Message + ex.StackTrace);
             }
         }
+
+        public int DeletePost(int post_id)
+        {
+            try
+            {
+                int rowAffected =  _postRepository.DeletePost(post_id);
+
+                if (rowAffected == 0)
+                {
+                    throw new InternalServerError("Xóa bài đăng thất bại.");
+                }
+
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AppError) { throw; }
+
+                throw new InternalServerError(ex.Message + ex.StackTrace);
+            }
+        }
     }
 }

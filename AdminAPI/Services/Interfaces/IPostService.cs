@@ -9,5 +9,7 @@ namespace AdminAPI.Services.Interfaces
         public PostModel GetPostById(int postId);
 
         public int CountAll();
+
+        public int DeletePost(int post_ids);
     }
 }

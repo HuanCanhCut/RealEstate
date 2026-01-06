@@ -32,6 +32,7 @@ namespace UserAPI.DTO.Request
 
         public Role role { get; set; } = Role.all;
         public string? location { get; set; }
+        public int? user_id { get; set; }
 
     }
 }

@@ -270,6 +270,11 @@ namespace UserAPI.Repositories
                     sql += $" AND administrative_address LIKE '%{request.location}%'";
                 }
 
+                if (request.user_id != null)
+                {
+                    sql += $" AND users.id = {request.user_id}";
+                }
+
                 sql += $" ORDER BY posts.id DESC LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);

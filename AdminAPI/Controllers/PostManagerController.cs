@@ -73,5 +73,23 @@ namespace AdminAPI.Controllers
                 throw;
             }
         }
+
+        [HttpDelete("{id}/admin")]
+        public ActionResult DeletePost(int post_id)
+        {
+            try
+            {
+                _postService.DeletePost(post_id);
+
+                return Ok(new
+                {
+                    message = $"Post id {post_id} đã được xóa thành công bởi admin.",
+                    status = 200
+                });
+            } catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

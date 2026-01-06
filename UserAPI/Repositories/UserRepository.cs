@@ -74,7 +74,7 @@ namespace UserAPI.Repositories
         {
             try
             {
-                string query = @$"SELECT * FROM users WHERE MATCH (nickname) AGAINST ('{nickname}')";
+                string query = @$"SELECT * FROM users WHERE nickname LIKE '%{nickname}%'";
                 return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>()?.FirstOrDefault();
             }
             catch (Exception)
