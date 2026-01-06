@@ -112,7 +112,10 @@ namespace AdminAPI.Repositories
                         COUNT(CASE WHEN post_status = 'approved' THEN 1 END) AS approved_count,
                         COUNT(CASE WHEN post_status = 'pending' THEN 1 END) AS pending_count,
                         COUNT(CASE WHEN post_status = 'rejected' THEN 1 END) AS rejected_count
-                    FROM posts;
+                    FROM posts
+                    
+                    WHERE is_deleted = 0
+                    AND deleted_at IS NULL;
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);

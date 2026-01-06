@@ -76,7 +76,7 @@ namespace AdminAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}/admin")]
+        [HttpDelete("{id}")]
         public ActionResult DeletePost(int id)
         {
             try
@@ -95,7 +95,7 @@ namespace AdminAPI.Controllers
         {
             try
             {
-                ServiceResponsePagination<PostModel> posts = _postService.GetPosts(request.page, request.per_page, request.post_status, request.project_type, request.category_id);
+                ServiceResponsePagination<PostModel> posts = _postService.GetPosts(request);
                 return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
                     data: posts.data,
                     meta: new MetaPagination(

@@ -1,4 +1,5 @@
-﻿using AdminAPI.DTO.Response;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.DTO.Response;
 using AdminAPI.Models;
 using AdminAPI.Models.Enums;
 using AdminAPI.Repositories.Interfaces;
@@ -119,13 +120,13 @@ namespace AdminAPI.Services
             }
         }
 
-        public ServiceResponsePagination<PostModel> GetPosts(int page, int per_page, PostEnum? post_status, ProjectType? project_type, int? category_id)
+        public ServiceResponsePagination<PostModel> GetPosts(GetPostsRequest request)
         {
             try
             {
                 // return _postRepository.GetPosts(page, per_page, post_status, project_type, category_id);
                 int total = this.CountAll();
-                List<PostModel> posts = _postRepository.GetPosts(page, per_page, post_status, project_type, category_id);
+                List<PostModel> posts = _postRepository.GetPosts(request);
 
                 return new ServiceResponsePagination<PostModel>
                 {

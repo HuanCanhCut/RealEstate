@@ -1,4 +1,5 @@
-﻿using AdminAPI.Models;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.Models;
 using AdminAPI.Models.Enums;
 using AdminAPI.Repositories.Interfaces;
 using AdminAPI.Services.Interfaces;
@@ -59,7 +60,7 @@ namespace AdminAPI.Repositories
             catch (Exception) { throw; }
         }
 
-        public List<PostModel> GetPosts(int page, int per_page, PostEnum? post_status, ProjectType? project_type, int? category_id)
+        public List<PostModel> GetPosts(GetPostsRequest request)
         {
             try
             {
@@ -72,27 +73,34 @@ namespace AdminAPI.Repositories
                             'updated_at', post_details.updated_at
                         ) as json_post_detail
                     FROM posts
-                    JOIN post_details ON posts.id = post_details.post_id
+                    LEFT JOIN post_details ON posts.id = post_details.post_id
                     WHERE is_deleted = 0
                     AND deleted_at IS NULL
                     AND 1=1
                 ";
 
-                if (post_status != null)
+                if (request.post_status != null)
                 {
-                    sql += $" AND post_status = '{post_status}'";
+                    sql += $" AND post_status = '{request.post_status}'";
                 }
-                if (project_type != null)
+                if (request.project_type != null)
                 {
-                    sql += $" AND project_type = '{project_type}'";
+                    sql += $" AND project_type = '{request.project_type}'";
                 }
-                if (category_id != null)
+                if (request.category_id != null)
                 {
-                    sql += $" AND category_id = {category_id}";
+                    sql += $" AND category_id = {request.category_id}";
+                }
+
+                if (request.search != null)
+                {
+                    sql += $" AND (title LIKE '%{request.search}%' OR address LIKE '%{request.search}%' OR adminstrative_address LIKE '%{request.search}%')";
                 }
 
                 sql += $" ORDER BY posts.id DESC";
-                sql += $" LIMIT {per_page} OFFSET {(page - 1) * per_page}";
+                sql += $" LIMIT {request.per_page} OFFSET {(request.page - 1) * request.per_page}";
+
+                Console.WriteLine(sql);
 
                 return _dbContext.ExecuteQuery(sql).ConvertTo<PostModel>()!;
             }

@@ -1,4 +1,5 @@
-﻿using AdminAPI.Models;
+﻿using AdminAPI.DTO.Request;
+using AdminAPI.Models;
 using AdminAPI.Models.Enums;
 
 namespace AdminAPI.Repositories.Interfaces
@@ -11,6 +12,6 @@ namespace AdminAPI.Repositories.Interfaces
         public int CountAll();
 
         public int DeletePost(int post_id);
-        public List<PostModel> GetPosts(int page, int per_page, PostEnum? post_status, ProjectType? project_type, int? category_id);
+        public List<PostModel> GetPosts(GetPostsRequest request);
     }
 }

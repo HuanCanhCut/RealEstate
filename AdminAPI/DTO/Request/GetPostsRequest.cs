@@ -20,5 +20,6 @@ namespace AdminAPI.DTO.Request
         [EnumDataType(typeof(ProjectType))]
         public ProjectType? project_type { get; set; }
         public int? category_id { get; set; }
+        public string? search { get; set; }
     }
 }
