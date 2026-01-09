@@ -296,7 +296,7 @@ namespace UserAPI.Repositories
         {
             try
             {
-                string sql = "SELECT COUNT(1) FROM posts";
+                string sql = "SELECT COUNT(1) FROM posts WHERE post_status = 'approved' AND status = 'Chưa bàn giao' AND is_deleted = 0 AND deleted_at IS NULL";
 
                 return Convert.ToInt32(_dbContext.ExecuteScalar(sql));
             }
@@ -316,9 +316,20 @@ namespace UserAPI.Repositories
                         (
                             SELECT 
                                 JSON_OBJECT(
-                                    'area', area,
-                                    'price', price,
-                                    'post_id', post_id
+                                    'id', post_details.id,
+                                    'type', post_details.type,
+                                    'area', post_details.area,
+                                    'price', post_details.price,
+                                    'post_id', post_details.post_id,
+                                    'bedrooms', post_details.bedrooms,
+                                    'bathrooms', post_details.bathrooms,
+                                    'balcony', post_details.balcony,
+                                    'main_door', post_details.main_door,
+                                    'legal_documents', post_details.legal_documents,
+                                    'interior_status', post_details.interior_status,
+                                    'deposit', post_details.deposit,
+                                    'created_at', post_details.created_at,
+                                    'updated_at', post_details.updated_at
                                 )
                             FROM post_details
                             WHERE post_details.post_id = posts.id

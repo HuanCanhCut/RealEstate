@@ -40,6 +40,7 @@ namespace AdminAPI.Controllers
                     );
                 }
 
+
                 List<CategoryModel> response = _categoryService.GetCategories(decoded?.sub);
                 return Ok(new ApiResponse<List<CategoryModel>, object?>(response));
             }

@@ -69,7 +69,7 @@ namespace UserAPI.Controllers
                 GetPostServiceResponse posts = _postService.GetPosts(postRequest, currentUserId);
 
                 return Ok(new ApiResponse<List<PostModel>, MetaPagination>(
-                    data: posts.data.ToList(),
+                    data: posts.data,
                     meta: new MetaPagination(
                         total: posts.total,
                         count: posts.count,

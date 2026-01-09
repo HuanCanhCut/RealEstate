@@ -22,7 +22,8 @@ namespace AdminAPI.Repositories
                         COUNT(posts.id) * 100.0 / (SELECT COUNT(*) FROM posts) AS percentage
                     FROM
                         categories
-                    JOIN posts ON posts.category_id = categories.id
+                    LEFT JOIN posts ON posts.category_id = categories.id
+                    WHERE categories.is_deleted = 0 AND categories.deleted_at IS NULL
                     GROUP BY categories.id
                 ";
 
@@ -48,8 +49,6 @@ namespace AdminAPI.Repositories
                         SELECT LAST_INSERT_ID();
                 ";
 
-                Console.WriteLine(sql);
-
                 int lastInsertId = Convert.ToInt32(_dbContext.ExecuteScalar(sql));
 
                 return lastInsertId;
@@ -65,7 +64,7 @@ namespace AdminAPI.Repositories
             try
             {
                 string sql = @$"
-                    SELECT * FROM categories WHERE id = {id}
+                    SELECT * FROM categories WHERE id = {id} AND is_deleted = 0 AND deleted_at IS NULL
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
@@ -83,7 +82,7 @@ namespace AdminAPI.Repositories
             try
             {
                 string sql = @$"
-                    SELECT * FROM categories WHERE `name` = '{name}' AND `key` = '{key}'
+                    SELECT * FROM categories WHERE `name` = '{name}' AND `key` = '{key}' AND is_deleted = 0 AND deleted_at IS NULL
                 ";
 
                 DataTable table = _dbContext.ExecuteQuery(sql);
@@ -106,7 +105,7 @@ namespace AdminAPI.Repositories
                     SET 
                         `name` = '{name}', 
                         `key` = '{key}'
-                    WHERE id = {id};
+                    WHERE id = {id} AND is_deleted = 0 AND deleted_at IS NULL;
                 ";
 
                 int affectedRows = _dbContext.ExecuteNonQuery(sql);
@@ -124,12 +123,10 @@ namespace AdminAPI.Repositories
             try
             {
                 string sql = @$"
-                    DELETE FROM categories WHERE id = {id}
+                    UPDATE categories SET is_deleted = 1, deleted_at = CURRENT_TIMESTAMP WHERE id = {id}
                 ";
 
-                int affectedRows = _dbContext.ExecuteNonQuery(sql);
-
-                return affectedRows;
+                return _dbContext.ExecuteNonQuery(sql);
             }
             catch (Exception)
             {

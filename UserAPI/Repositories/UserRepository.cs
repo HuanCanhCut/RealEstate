@@ -117,6 +117,7 @@ namespace UserAPI.Repositories
                       COUNT(posts.id) as post_count
                     FROM users
                     LEFT JOIN posts ON posts.user_id = users.id
+                    WHERE users.is_deleted = 0
                     GROUP BY users.id
                     LIMIT {per_page} OFFSET {offset}";
                 return _dbContext.ExecuteQuery(query).ConvertTo<UserModel>() ?? new List<UserModel>();
